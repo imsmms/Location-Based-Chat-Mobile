@@ -17,6 +17,7 @@ var userId;
  */
 var EMPTY_USERNAME_PASSWORD = "Please fill the required fields!!";
 var PHONE_NUMBER_EXCEEDS_LIMIT = "Phone number can't be that length, please check phone number field!!";
+var INVALID_USER_ID = "Sorry can't save your user id, invalid user id, please contact app administrator!!";
 
 /**
  * URLs

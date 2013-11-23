@@ -11,17 +11,34 @@ function registerUser(){
 	userName = "Ibrahim";//$("#userNameID").val();
 	phoneNumber = "01026357328";//$("#userPhoneNumber").val();
 	
-	if(userName.length == 0 || phoneNumber.length == 0){
-		alert(EMPTY_USERNAME_PASSWORD);
-		return;
-	}else if(phoneNumber.length > 20){
-		alert(PHONE_NUMBER_EXCEEDS_LIMIT);
-		return;
-	}
+	validateRegisterationInfo(userName,phoneNumber);
 	
 	getPhoneContacts();
 }
 
+/**
+ * validateRegisterationInfo is the function responsible for client validation
+ * of registration info
+ * @param username
+ * @param phonenumber
+ * @returns {Boolean}
+ */
+function validateRegisterationInfo(username,phonenumber){
+	if(username == undefined || username == null || 
+			phonenumber == undefined || phonenumber == null){
+		alert(EMPTY_USERNAME_PASSWORD);
+		return false;
+	}
+	if(username.length == 0 || phonenumber.length == 0){
+		alert(EMPTY_USERNAME_PASSWORD);
+		return false;
+	}else if(phonenumber.length > 20){
+		alert(PHONE_NUMBER_EXCEEDS_LIMIT);
+		return false;
+	}else{
+		return true;
+	}
+}
 
 /**
  * getPhoneContacts is the function responsible for getting the phone contacts
@@ -52,6 +69,10 @@ function getPhoneContactsSuccess(contacts){
 		}
 	}
 	console.log(JSON.stringify(phoneContactsArray));
+	getMyLocation();
+}
+
+function getMyLocation(){
 	navigator.geolocation.getCurrentPosition(getCurrentPositionSuccess, getCurrentPositionError);
 }
 
@@ -74,12 +95,25 @@ function getCurrentPositionError(){
 }
 
 function saveUserId(id){
+	if(id == null || id == undefined || id ==""){
+		alert(INVALID_USER_ID);
+		return false;
+	}
 	userId = id;
 	userName = "";
 	phoneNumber = "";
 	localStorage.setItem("UserID", id);
+	if(localStorage.getItem("UserID")){
+		return true;
+	}
 }
 
 function getUserId(){
-	userId = localStorage.getItem("UserID");
+	if(localStorage.getItem("UserID")){
+		userId = localStorage.getItem("UserID");
+		return true;
+	}
+	return false;
+	
+	
 }

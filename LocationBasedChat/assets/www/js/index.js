@@ -32,7 +32,8 @@ function setup() {
 function onDeviceReady() {
 	// get device's geographical location and return it as a Position object (which is then passed to onSuccess)
 	navigator.geolocation.getCurrentPosition(onSuccess, onError);
-
+	//For jasmine testing for now
+	//window.location = "spec.html";
 }
 
 function getContacts(loc){
