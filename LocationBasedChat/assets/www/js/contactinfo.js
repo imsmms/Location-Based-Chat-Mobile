@@ -1,5 +1,5 @@
 /**
- * 
+ * Contact Model
  */
 
 var Contact = {

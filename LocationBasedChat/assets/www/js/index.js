@@ -17,8 +17,6 @@
  * under the License.
  */
 
-var locObj;
-
 function initialize() {
 
 	google.maps.event.addDomListener(window, 'load', function(){
@@ -34,19 +32,11 @@ function setup() {
 function onDeviceReady() {
 	// get device's geographical location and return it as a Position object (which is then passed to onSuccess)
 	navigator.geolocation.getCurrentPosition(onSuccess, onError);
-}
 
-function getContactslocally(){
-	var options = new ContactFindOptions();
-	options.filter="";          // empty search string returns all contacts
-	options.multiple=true;      // return multiple results
-	filter = ["displayName", "name", "phoneNumbers","photos","emails"];
-	// find contacts
-	navigator.contacts.find(filter, getContactslocallySuccess, null, options);
 }
 
 function getContacts(loc){
-	var url = "http://location-based-chat.herokuapp.com/near/:01222222222/:" + loc.pb +"/:" + loc.ob;
+	var url = BASE_URL + NEAR_CONTACTS_API + "01222222222/:" + loc.pb +"/:" + loc.ob;
 	$.getJSON(url,function(data){
 		console.log(JSON.stringify(data));
 		var contactObj = {};
@@ -110,18 +100,4 @@ function createMarker(markerObj,pinColor){
 
 function onError(){
 	alert("Cant load location");
-}
-function getContactslocallySuccess(contacts){
-	console.log("# of contacts: " + contacts.length);
-	console.log(JSON.stringify(contacts));
-	var contactObj = {};
-	for(var i=0;i<5;i++){
-		contactObj.name = contacts[i].displayName;
-		console.log(contactObj.name);
-		var lat = locObj.position.ob + ((i+1)*0.01);
-		var lng = locObj.position.pb + ((i+1)*0.01);;
-		var contactLoc = new google.maps.LatLng(lat, lng);
-		contactObj.position = contactLoc;
-		createMarker(contactObj,"67F097");
-	}
 }
