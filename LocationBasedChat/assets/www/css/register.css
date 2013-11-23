@@ -1,0 +1,13 @@
+body {
+	background:#000000 url('../img/registerbg.jpg') no-repeat center top;
+}
+
+#wrap {
+	width: 90%;
+	margin: auto;
+}
+
+#wrap input {
+	width: 100%;
+	margin: 10px 0;
+}
