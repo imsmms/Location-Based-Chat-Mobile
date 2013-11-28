@@ -7,18 +7,18 @@
 	content="initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,width=device-width,height=device-height,target-densitydpi=device-dpi,user-scalable=yes" />
 <title>Insert title here</title>
 <script type="text/javascript" src="js/jquery.js"></script>
-<script type="text/javascript" src="js/jquery.mobile-1.3.1.js"></script>
-<script type="text/javascript" src="cordova.js"></script>
 <script type="text/javascript" src="js/index.js"></script>
-<script type="text/javascript">$.mobile.loadingMessage = false;</script>
 <script type="text/javascript" src="js/sharedResources.js"></script>
 <script src="http://location-based-chat.herokuapp.com/socket.io/socket.io.js"></script>
 <script src="js/chat.js"></script>
+<script type="text/javascript">//$.mobile.loadingMessage = false;
+$(document).ready(function() { Inizialize('01221345561');
+$('#btn').click(function() { sendMessage($('#txt').val()); }); });</script>
 <link rel="stylesheet" href="css/bubbles.css">
 </head>
 <body>
 	<div style="width: 100%;"></div>
-	<input type="text" style="width: 100%; position: absolute; bottom: 0;">
-
+	<input type="text" id="txt" style="width: 100%; position: absolute; bottom: 0;" />
+	<input type="button" id="btn" value="send" />
 </body>
 </html>
