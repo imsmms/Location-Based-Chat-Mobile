@@ -10,14 +10,33 @@ var phoneContactsArray = [];
 var locObj;
 var userName;
 var phoneNumber;
+var phoneContacts = [];
+var appContacts = [];
+var nearByContacts = [];
+var namePhoneMapping = {};
+var isnearBy = false;
+var chatID;
 //Stubbed user ID
-var userId = "528fae96dce8b6940f000007";
+var userId;
 
+/**
+ * Contact Model
+ */
+
+var Contact = {
+	contactName : "",
+	contactPhones : [],
+	contactPhone : "",
+	contactMail : "",
+	contactPhoto : "",
+	contactLocation : {}
+};
 
 /**
  * Defining the environment 
  * 1->testing
  * 2->Development
+ * 3->trial
  */
 var envVariable = 2;
 
@@ -34,5 +53,5 @@ var Location_Error = "Sorry can't load your location!!";
  */
 
 var BASE_URL = "http://location-based-chat.herokuapp.com";
-var NEAR_CONTACTS_API = "/near/:";
-var REGISTER_API = "/register/:";
+var NEAR_CONTACTS_API = "/near/";
+var REGISTER_API = "/register/";

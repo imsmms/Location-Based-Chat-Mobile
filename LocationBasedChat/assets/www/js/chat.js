@@ -7,6 +7,7 @@ var socket;
 var receiver_id;
 
 function Inizialize(receiver){
+	$("#friendName").html(chatID);
 	var url = BASE_URL;
 	socket = io.connect(BASE_URL);
 	//socket.emit('chat', {id: '5295d752192e68720f000005'});
@@ -39,10 +40,14 @@ function displayChatBubbles(message,isSender){
 
 $(document).keypress(function(e) {
 	if(e.which == 13) {
-		var message = $("#chatinput").val();
-		displayChatBubbles(message,true);
-		sendMessage(message);
+		sendMessageUI();
 	}
 });
+
+function sendMessageUI(){
+	var message = $("#chatinput").val();
+	displayChatBubbles(message,true);
+	sendMessage(message);
+}
 
 $("#chatarea").height($(window).height());

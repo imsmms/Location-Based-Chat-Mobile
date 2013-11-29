@@ -61,14 +61,24 @@ function getPhoneContactsSuccess(contacts){
 	console.log("# of contacts: " + contacts.length);
 	var phoneContactsArrayCount = 0;
 	for(var i=0;i<contacts.length;i++){
+		//phoneContacts[i] = new Contact();
+		//phoneContacts[i].contactName = contacts[i].displayName;
 		if(contacts[i].phoneNumbers){
 			for(var j=0;j<contacts[i].phoneNumbers.length;j++){
 				phoneContactsArray[phoneContactsArrayCount] = contacts[i].phoneNumbers[j].value;
+				//phoneContacts[i].contactPhones[j] = contacts[i].phoneNumbers[j].value;
+				namePhoneMapping[contacts[i].phoneNumbers[j].value] = contacts[i].displayName;
 				phoneContactsArrayCount++;
 			}	
 		}
 	}
 	console.log(JSON.stringify(phoneContactsArray));
+	if(isnearBy){
+		//window.location = "nearByContactsMap.html";
+		$("#pagePort").load("nearByContactsMap.html", function(){
+		});
+		return;
+	}
 	getMyLocation();
 }
 
@@ -104,6 +114,8 @@ function saveUserId(id){
 	phoneNumber = "";
 	localStorage.setItem("UserID", id);
 	if(localStorage.getItem("UserID")){
+		$("#pagePort").load("nearByContactsMap.html", function(){
+		});
 		return true;
 	}
 }
@@ -111,6 +123,7 @@ function saveUserId(id){
 function getUserId(){
 	if(localStorage.getItem("UserID")){
 		userId = localStorage.getItem("UserID");
+		console.log(userId);
 		return true;
 	}
 	return false;

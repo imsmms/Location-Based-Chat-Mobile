@@ -28,15 +28,20 @@
 	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC1zLRRsngMXTI9VXujReJKtcFWic6Lyhc&sensor=true">
 	
 </script>
+<script
+	src="http://location-based-chat.herokuapp.com/socket.io/socket.io.js"></script>
 
 <script type="text/javascript" src="js/jquery.js"></script>
 <script type="text/javascript" src="js/jquery.mobile-1.3.1.js"></script>
 <script type="text/javascript" src="cordova.js"></script>
 <script type="text/javascript" src="js/sharedResources.js"></script>
 <script type="text/javascript" src="js/registration.js"></script>
-<script type="text/javascript" src="js/index.js"></script>
 <script type="text/javascript" src="js/chat.js"></script>
-<script type="text/javascript">$.mobile.loadingMessage = false;</script>
+<script type="text/javascript" src="js/nearByContactsMap.js"></script>
+<script type="text/javascript" src="js/index.js"></script>
+<script type="text/javascript">
+	$.mobile.loadingMessage = false;
+</script>
 
 <script type="text/javascript">
 	initialize();
@@ -44,8 +49,14 @@
 	//document.addEventListener('deviceready', onDeviceReady, false);
 </script>
 
+<link href="css/jquery.mobile-1.3.1.css" rel="stylesheet">
+<link href="css/jquery.mobile.theme-1.3.1.css" rel="stylesheet">
+<link href="css/jquery.mobile.structure-1.3.1.css" rel="stylesheet">
+<link href="css/bubbles.css" rel="stylesheet">
+<link rel="stylesheet" href="css/register.css">
+
 </head>
 <body>
-
+	<div id="pagePort"></div>
 </body>
 </html>
