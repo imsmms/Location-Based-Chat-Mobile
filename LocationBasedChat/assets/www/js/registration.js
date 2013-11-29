@@ -76,6 +76,7 @@ function getPhoneContactsSuccess(contacts){
 	if(isnearBy){
 		//window.location = "nearByContactsMap.html";
 		$("#pagePort").load("nearByContactsMap.html", function(){
+			$('body').css("background-image","none");
 		});
 		return;
 	}

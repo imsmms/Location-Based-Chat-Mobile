@@ -8,6 +8,10 @@ var receiver_id;
 
 function Inizialize(receiver){
 	$("#friendName").html(chatID);
+	
+	var chatareaheight = parseInt($(window).height()) - 102;
+	$("#chatarea").css("max-height",chatareaheight+"px");
+	touchScroll('chatarea');
 	var url = BASE_URL;
 	socket = io.connect(BASE_URL);
 	//socket.emit('chat', {id: '5295d752192e68720f000005'});
@@ -50,4 +54,6 @@ function sendMessageUI(){
 	sendMessage(message);
 }
 
-$("#chatarea").height($(window).height());
+
+
+

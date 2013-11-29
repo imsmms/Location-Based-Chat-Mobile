@@ -49,12 +49,14 @@ function onDeviceReady() {
 			//window.location = "nearByContactsMap.html";
 		}else{
 			$("#pagePort").load("registration.html", function(){
+				$('body').css("background-image","none");
 			});
 			//window.location = "registration.html";
 		}
 		break;
 	case 3://trial
 		$("#pagePort").load("registration.html", function(){
+			$('body').css("background-image","none");
 		});
 		//window.location = "registration.html";
 	}
