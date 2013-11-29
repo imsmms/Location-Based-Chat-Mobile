@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="viewport"
+	content="initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,width=device-width,height=device-height,target-densitydpi=device-dpi,user-scalable=yes" />
+<title>Register Here</title>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/sharedResources.js"></script>
+<script type="text/javascript" src="js/registration.js"></script>
+<script type="text/javascript">$.mobile.loadingMessage = false;</script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('#btnRegister').click(function() {
+			registerUser();
+		});
+	});
+</script>
+<link rel="stylesheet" href="css/register.css">
+</head>
+<body>
+	<div id="wrap">
+		<input type="text" id="userNameID" placeholder="Username" />
+		<input type="phone" id="userPhoneNumber" placeholder="Phone Number" />
+		<input type="button" id="btnRegister" value="Register" />
+	</div>
+</body>
+</html>

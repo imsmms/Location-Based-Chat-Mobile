@@ -31,7 +31,7 @@
     </author>
 
     <access origin="*"/>
-    <access origin="http://location-based-chat.herokuapp.com*"/>
+
     <!-- <content src="http://mysite.com/myapp.html" /> for external pages -->
     <content src="index.html" />
 
