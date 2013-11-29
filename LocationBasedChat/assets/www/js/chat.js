@@ -1,3 +1,7 @@
+/**
+ * chat.js is the controller that responsible for all the logic related to chat
+ */
+
 var messageLog = [];
 var socket;
 var receiver_id;
@@ -21,3 +25,24 @@ function sendMessage(message){
 function appendMessageToLog(message, sender) {
 	//messageLog.add({ Message: message, Sender: sender });
 }
+
+function displayChatBubbles(message,isSender){
+	var appendedHTML = "";
+	if(isSender){
+		appendedHTML = "<p class=\"triangle-border right\">"+message+"<\/p>";
+		//alert(appendedHTML);
+	}else{
+		appendedHTML = "<p class=\"triangle-border left\">"+message+"<\/p>";
+	}
+	$("#chatarea").append(appendedHTML);
+}
+
+$(document).keypress(function(e) {
+	if(e.which == 13) {
+		var message = $("#chatinput").val();
+		displayChatBubbles(message,true);
+		sendMessage(message);
+	}
+});
+
+$("#chatarea").height($(window).height());

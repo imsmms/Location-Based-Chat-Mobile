@@ -8,8 +8,8 @@
  * registerUser is the function that initiates the registration process
  */
 function registerUser(){
-	userName = "Ibrahim";//$("#userNameID").val();
-	phoneNumber = "01026357328";//$("#userPhoneNumber").val();
+	userName = $("#userNameID").val();//"Ibrahim";
+	phoneNumber = $("#userPhoneNumber").val();//"01026357328";
 	
 	validateRegisterationInfo(userName,phoneNumber);
 	
