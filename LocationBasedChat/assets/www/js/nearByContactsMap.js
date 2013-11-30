@@ -93,7 +93,7 @@ function createInfoWindowContent(name,id){
 	infoWindow += "	<div style=\"position: absolute; left: 60px; top: 30px; color: black; font-size: 10px;\"";
 	infoWindow += "	id=\"friendStatus\">friend status<\/div>";
 	infoWindow += "	<button style=\"position: absolute; top: 60px; left: 8px; right: 8px;\"";
-	infoWindow += "	onclick=\"OpenChat(this.id)\" id=\""+name+"\">Chat<\/button>";
+	infoWindow += "	onclick=\"OpenChat(this.id)\" id=\""+id+"\">Chat<\/button>";
 	infoWindow += "	<\/div><\/div>";
 	return infoWindow;
 }
@@ -116,12 +116,12 @@ function getNearByContacts(loc){
 	$.getJSON(url,getNearByContactsSuccess).fail(function() {
 	    console.log( "error" );
 		//fake data
-	    var contactObj = {};
-		contactObj.name = "Ibrahim";
-		contactObj.number = "01025600901";
-		var contactLoc = new google.maps.LatLng(30.02, 31.216);
-		contactObj.position = contactLoc;
-		createMarker(contactObj,"67F097");
+//	    var contactObj = {};
+//		contactObj.name = "Ibrahim";
+//		contactObj.number = "01025600901";
+//		var contactLoc = new google.maps.LatLng(30.02, 31.216);
+//		contactObj.position = contactLoc;
+//		createMarker(contactObj,"67F097");
 	  });
 }
 
@@ -144,11 +144,11 @@ function getNearByContactsSuccess(data){
 	fillNearByContacts(data);
 	
 	//fake data
-	contactObj.name = "Ibrahim";
-	contactObj.number = "01025600901";
-	var contactLoc = new google.maps.LatLng(30.02, 31.216);
-	contactObj.position = contactLoc;
-	createMarker(contactObj,"67F097");
+//	contactObj.name = "Ibrahim";
+//	contactObj.number = "01025600901";
+//	var contactLoc = new google.maps.LatLng(30.02, 31.216);
+//	contactObj.position = contactLoc;
+//	createMarker(contactObj,"67F097");
 }
 
 function fillNearByContacts(data){
