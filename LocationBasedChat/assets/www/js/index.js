@@ -35,15 +35,30 @@ function onDeviceReady() {
 	switch(envVariable){
 	case 1:
 		//For jasmine testing for now
-		window.location = "spec.html";
+		
+		$("#pagePort").load("spec.html", function(){
+		});
+		//window.location = "spec.html";
 		break;
 	case 2:
 		if(getUserId()){
-			window.location = "nearByContactsMap.html";
+			console.log("nearby");
+			getPhoneContacts();
+			//navigator.notification.loadingStart();
+			isnearBy = true;
+			//window.location = "nearByContactsMap.html";
 		}else{
-			window.location = "registration.html";
+			$("#pagePort").load("registration.html", function(){
+				$('body').css("background-image","none");
+			});
+			//window.location = "registration.html";
 		}
 		break;
+	case 3://trial
+		$("#pagePort").load("registration.html", function(){
+			$('body').css("background-image","none");
+		});
+		//window.location = "registration.html";
 	}
 	
 }

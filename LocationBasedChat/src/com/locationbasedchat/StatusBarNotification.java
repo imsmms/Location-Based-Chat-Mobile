@@ -97,7 +97,7 @@ public class StatusBarNotification extends CordovaPlugin {
 		
 		// We trust the flag value as it comes from our JS constant.
 		// This is also backwards compatible as it will be emtpy.
-		if (!flag.isEmpty()){
+		if (flag.length() > 0){
 			flagVal = Integer.parseInt(flag);
 		}
 		

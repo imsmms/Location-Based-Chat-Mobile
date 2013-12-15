@@ -57,9 +57,20 @@ function createMarker(markerObj,pinColor){
 		title:markerObj.position.ob + ", " + markerObj.position.pb,
 		icon: pinImage
 	}); 
-	var infowindow  = new google.maps.InfoWindow({
-        content: markerObj.name
-    });
+	var infowindow;
+	if(markerObj.name == "my location"){
+		infowindow = new google.maps.InfoWindow({
+	        content: markerObj.name
+	    });
+	}else{
+		var contentString = createInfoWindowContent(markerObj.name,markerObj.number);
+		console.log(contentString);
+		
+		infowindow = new google.maps.InfoWindow({
+	        content: contentString
+	    });
+	}
+	
 	
 	
 	google.maps.event.addListener(marker, 'click', function () {
@@ -71,13 +82,47 @@ function createMarker(markerObj,pinColor){
 	});*/
 }
 
+
+function createInfoWindowContent(name,id){
+	var infoWindow="<div style=\"width:320px; height:100px;\">";
+	infoWindow += "	<div style=\"width: 100%; position: absolute; top: 0px; height: 80px;\">";
+	infoWindow += "<img alt=\"\" src=\"img\/user.png\"";
+	infoWindow += "	style=\"width: 40px; height: 40px; position: absolute; top: 10px; left: 10px;\">";
+	infoWindow += "	<div style=\"position: absolute; left: 60px; top: 10px; color: black; font-size: 15px;\"";
+	infoWindow += "	id=\"friendName\">"+name+"<\/div>";
+	infoWindow += "	<div style=\"position: absolute; left: 60px; top: 30px; color: black; font-size: 10px;\"";
+	infoWindow += "	id=\"friendStatus\">friend status<\/div>";
+	infoWindow += "	<button style=\"position: absolute; top: 60px; left: 8px; right: 8px;\"";
+	infoWindow += "	onclick=\"OpenChat(this.id)\" id=\""+id+"\">Chat<\/button>";
+	infoWindow += "	<\/div><\/div>";
+	return infoWindow;
+}
+
+
+function OpenChat(id){
+	chatID = id;
+	//window.location = "chat.html";
+	$("#pagePort").load("chat.html", function(){
+	});
+}
+
 /**
  * getNearByContacts is the function responsible for getting nearby contacts
  * @param loc
  */
 function getNearByContacts(loc){
-	var url = BASE_URL + NEAR_CONTACTS_API + userId + "/:" + loc.pb +"/:" + loc.ob;
-	$.getJSON(url,getNearByContactsSuccess);
+	var url = BASE_URL + NEAR_CONTACTS_API + userId + "/" + loc.pb +"/" + loc.ob + "/5";
+	console.log(url);
+	$.getJSON(url,getNearByContactsSuccess).fail(function() {
+	    console.log( "error" );
+		//fake data
+//	    var contactObj = {};
+//		contactObj.name = "Ibrahim";
+//		contactObj.number = "01025600901";
+//		var contactLoc = new google.maps.LatLng(30.02, 31.216);
+//		contactObj.position = contactLoc;
+//		createMarker(contactObj,"67F097");
+	  });
 }
 
 /**
@@ -88,11 +133,42 @@ function getNearByContactsSuccess(data){
 	console.log(JSON.stringify(data));
 	var contactObj = {};
 	for(var i = 0;i<data.contacts.length;i++){
-		contactObj.name = data.contacts[i].name;
+		contactObj.name = namePhoneMapping[data.contacts[i].number];
+		contactObj.number = data.contacts[i].number;
 		var lat = data.contacts[i].position[0];
 		var lng = data.contacts[i].position[1];
 		var contactLoc = new google.maps.LatLng(lat, lng);
 		contactObj.position = contactLoc;
 		createMarker(contactObj,"67F097");
 	}
+	fillNearByContacts(data);
+	
+	//fake data
+//	contactObj.name = "Ibrahim";
+//	contactObj.number = "01025600901";
+//	var contactLoc = new google.maps.LatLng(30.02, 31.216);
+//	contactObj.position = contactLoc;
+//	createMarker(contactObj,"67F097");
+}
+
+function fillNearByContacts(data){
+	for(var i = 0;i<data.contacts.length;i++){
+		nearByContacts[i] = new Contact();
+		nearByContacts[i].contactPhone = data.contacts[i].number;
+		nearByContacts[i].contactName = namePhoneMapping[data.contacts[i].number];
+	}
+}
+
+function InitializeGroupChats() {
+	for(var group in ChatGroups) {
+		$('#groupChats').append('<option value="' + group.groupId +
+			'">' + group.Name + '</option>');
+	}
+}
+
+function OpenGroupChat() {
+	var group = $('#groupChats').val();
+	chatID = group;
+	$("#pagePort").load("chat.html", function(){
+	});
 }

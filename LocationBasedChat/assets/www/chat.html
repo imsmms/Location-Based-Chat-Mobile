@@ -1,32 +1,33 @@
 <!DOCTYPE html>
 
 <script type="text/javascript">
-        $.mobile.loadingMessage = false;
-        $(document).ready(function() { Inizialize(chatID)});
+	$.mobile.loadingMessage = false;
+	$(document).ready(function() { Initialize()});
 </script>
-
-
-
-
+<div id="groupMembers" style="display:none;width: 90%;margin:auto">
+	<select multiple id="contactList"></select><br />
+	<input type="button" value="Submit" style="width:45%;margin:auto" onclick="AddMembers()" />
+	<input type="button" value="Cancel" style="width:50%;margin:auto" onclick="CancelAction() />
+</div>
 <div
-        style="width: 100%; position: absolute; background-color: #304446; top: 0px; height: 60px;">
-        <img alt="" src="img/user.png"
-                style="width: 40px; height: 40px; position: absolute; top: 10px; left: 10px;">
-        <div
-                style="position: absolute; left: 60px; top: 10px; color: white; font-size: 15px;"
-                id="friendName">friend name</div>
-        <div
-                style="position: absolute; left: 60px; top: 30px; color: white; font-size: 10px;"
-                id="friendStatus">online</div>
+	style="width: 100%; position: absolute; background-color: #304446; top: 0px; height: 60px;">
+	<img alt="" src="img/user.png"
+		style="width: 40px; height: 40px; position: absolute; top: 10px; left: 10px;">
+	<div
+		style="position: absolute; left: 60px; top: 10px; color: white; font-size: 15px;"
+		id="friendName">friend name</div>
+	<div
+		style="position: absolute; left: 60px; top: 30px; color: white; font-size: 10px;"
+		id="friendStatus">online</div>
 </div>
 <div id="chatarea"
-        style="width: 100%; position: absolute; bottom: 50px; overflow-y: scroll;"></div>
+	style="width: 100%; position: absolute; bottom: 50px; overflow-y: scroll;"></div>
 <div
-        style="width: 100%; position: absolute; bottom: 0; background-color: gray;">
-        <input id="chatinput" type="text"
-                style="width: 90%; font-size: 15px !important; height: 40px;">
-        <img alt="" src="img/ic_action_send.png"
-                style="width: 9%; height: 100%; position: absolute; right: 0px; bottom: 0px;"
-                onclick="sendMessageUI()">
+	style="width: 100%; position: absolute; bottom: 0; background-color: gray;">
+	<input id="chatinput" type="text"
+		style="width: 90%; font-size: 15px !important; height: 40px;">
+	<img alt="" src="img/ic_action_send.png"
+		style="width: 9%; height: 100%; position: absolute; right: 0px; bottom: 0px;"
+		onclick="sendMessageUI()">
 
 </div>

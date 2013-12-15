@@ -1,10 +1,15 @@
 body {
-	background:#000000 url('../img/registerbg.jpg') no-repeat center top;
+    height:100%;
+    width:100%;
+    background-image: url("../img/nearby-friends-logo.jpg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
 }
 
 #wrap {
 	width: 90%;
 	margin: auto;
+	background-color: #EEECEF;
 }
 
 #wrap input {
