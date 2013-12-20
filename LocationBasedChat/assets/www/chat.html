@@ -1,13 +1,32 @@
 <!DOCTYPE html>
-
+<style>select { height: 90%; } option { height: 30px }</style>
 <script type="text/javascript">
 	$.mobile.loadingMessage = false;
 	$(document).ready(function() { Initialize()});
 </script>
-<div id="groupMembers" style="display:none;width: 90%;margin:auto">
-	<select multiple id="contactList"></select><br />
-	<input type="button" value="Submit" style="width:45%;margin:auto" onclick="AddMembers()" />
-	<input type="button" value="Cancel" style="width:50%;margin:auto" onclick="CancelAction() />
+<div id="groupMembers" style="width: 90%;margin: 65px auto;z-index=1000">
+	<select multiple id="contactList" style="width: 100%">
+	<option>X</option>
+	<option>X</option>
+	<option>X</option>
+	<option>X</option>
+	<option>X</option>
+	<option>X</option>
+	<option>X</option>
+	<option>X</option>
+	<option>X</option>
+	<option>X</option>
+	<option>X</option>
+	<option>X</option>
+	<option>X</option>
+	<option>X</option>
+	<option>X</option>
+	<option>X</option>
+	<option>X</option>
+	<option>X</option>
+	</select><br />
+	<input type="button" value="Submit" style="width:49%;margin:0" onclick="AddMembers()" />
+	<input type="button" value="Cancel" style="width:49%;margin:0" onclick="CancelAction()" />
 </div>
 <div
 	style="width: 100%; position: absolute; background-color: #304446; top: 0px; height: 60px;">

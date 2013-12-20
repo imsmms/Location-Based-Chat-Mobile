@@ -16,6 +16,7 @@ function Initialize(){
 	
 	if(chatID === "0")
 		ShowGroupSelect();
+		$("#friendName").html("Group Chat");
 	}
 	socket.emit('chat', {id: userId});
 	socket.on('message', function(data) {
@@ -23,13 +24,13 @@ function Initialize(){
 			return;
 		if (data['groupID'] && data['groupID'] == chatID) {
 			appendMessageToLog(data['txt'], data['from']);
-			displayChatBubbles(data['txt'],false);
-		}
-		else if(data['from'] && data['from'] == chatID) {
-			appendMessageToLog(data['txt'], data['from']);
 			var tmpMsg = (namePhoneMapping[data['from']] ? namePhoneMapping[data['from']] : data['from'])
 				+ ": " + data['txt'];
 			displayChatBubbles(tmpMsg,false);
+		}
+		else if(data['from'] && data['from'] == chatID) {
+			appendMessageToLog(data['txt'], data['from']);
+			displayChatBubbles(data['txt'],false);
 		} else {
 			window.plugins.statusBarNotification.notify(namePhoneMapping[data['from']] + " says:", {
 				body: data['txt'],
