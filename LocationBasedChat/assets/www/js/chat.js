@@ -17,6 +17,7 @@ function Initialize(){
 	if(chatID === "0")
 		ShowGroupSelect();
 		$("#friendName").html("Group Chat");
+		$('#manageGroup').show();
 	}
 	socket.emit('chat', {id: userId});
 	socket.on('message', function(data) {
@@ -82,7 +83,7 @@ function ShowGroupSelect() {
 		if(ChatGroups[chatID] == null || ChatGroups[chatID][nearByContacts[i].number] == null)
 			$('#contactList').append('<option value="' + nearByContacts[i].contactPhone + '">' + nearByContacts[i].contactName + '</option>
 	}
-	$('#groupMembers').show();
+	$('#groupMembers').multiselect().show();
 }
 
 function ShowGroupMembers() {
@@ -91,14 +92,14 @@ function ShowGroupMembers() {
 	for(var i = 0; i < members.length; i++) {
 		$('#contactList').append('<option value="' + members[i] + '">' + namePhoneMapping[members[i]] + '</option>
 	}
-	$('#groupMembers').show();
+	$('#groupMembers').multiselect().show();
 }
 
 function AddMembers() {
 	var members = $('#contactList').val();
-	socket.emit('group-chat', { groupID: chatID, members: members });
-	if(chatID === '0')
-		socket.on('group-chat', function(data) { chatID = data['groupID']; });
+	socket.emit('group-chat', { groupID: chatID, members: members }, function(groupID) {
+		chatID = groupID;
+	});
 }
 
 function CancelAction() {

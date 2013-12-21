@@ -19,9 +19,9 @@
 
 function initialize() {
 
-	google.maps.event.addDomListener(window, 'load', function(){
+	//google.maps.event.addDomListener(window, 'load', function(){
 		setup();
-	});
+	//});
 
 }
 
@@ -31,8 +31,14 @@ function setup() {
 
 function onDeviceReady() {
 	// get device's geographical location and return it as a Position object (which is then passed to onSuccess)
+	window.plugins.statusBarNotification.notify("Simon says:", "hello", 0);
+	/*window.plugins.statusBarNotification.notify("Simon says:", {
+		body: "hello",
+		tag: "Open Chat",
+		onclick: function() { alert("yeppey"); }
+	}, null);*/
 	
-	switch(envVariable){
+	/*switch(envVariable){
 	case 1:
 		//For jasmine testing for now
 		
@@ -59,6 +65,6 @@ function onDeviceReady() {
 			$('body').css("background-image","none");
 		});
 		//window.location = "registration.html";
-	}
+	}*/
 	
 }
