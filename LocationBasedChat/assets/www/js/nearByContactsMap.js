@@ -158,3 +158,17 @@ function fillNearByContacts(data){
 		nearByContacts[i].contactName = namePhoneMapping[data.contacts[i].number];
 	}
 }
+
+function InitializeGroupChats() {
+	for(var group in ChatGroups) {
+		$('#groupChats').append('<option value="' + group.groupId +
+			'">' + group.Name + '</option>');
+	}
+}
+
+function OpenGroupChat() {
+	var group = $('#groupChats').val();
+	chatID = group;
+	$("#pagePort").load("chat.html", function(){
+	});
+}

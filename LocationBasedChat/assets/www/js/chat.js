@@ -3,41 +3,42 @@
  */
 
 var messageLog = [];
-var socket;
-var receiver_id;
 
-function Inizialize(receiver){
+function Initialize(){
 	$("#friendName").html(namePhoneMapping[chatID]);
-	
 	var chatareaheight = parseInt($(window).height()) - 102;
 	$("#chatarea").css("max-height",chatareaheight+"px");
 	touchScroll('chatarea');
+	
 	var url = BASE_URL;
-	socket = io.connect(BASE_URL);
-	socket.emit('chat', {id: chatID});
+	if(socket == null)
+		socket = io.connect(BASE_URL);
+	
+	if(chatID === "0")
+		ShowGroupSelect();
+		$("#friendName").html("Group Chat");
+		$('#manageGroup').show();
+	}
+	socket.emit('chat', {id: userId});
 	socket.on('message', function(data) {
-		if(data['from'] == null && data['from'] == '')
+		if(data['from'] == null || data['from'] == '')
 			return;
-		if(data['from'] == receiver_id) {
+		if (data['groupID'] && data['groupID'] == chatID) {
 			appendMessageToLog(data['txt'], data['from']);
-			displayChatBubbles(message,false);
+			var tmpMsg = (namePhoneMapping[data['from']] ? namePhoneMapping[data['from']] : data['from'])
+				+ ": " + data['txt'];
+			displayChatBubbles(tmpMsg,false);
+		}
+		else if(data['from'] && data['from'] == chatID) {
+			appendMessageToLog(data['txt'], data['from']);
+			displayChatBubbles(data['txt'],false);
 		} else {
-			var options = new ContactFindOptions();
-			options.filter=data['from'];          // empty search string returns all contacts
-			options.multiple=false;      // return multiple results
-			filter = ["displayName", "name"];
-			// find contacts
-			navigator.contacts.find(filter, function(contacts) {
-				if(contacts.length > 0)
-					//window.plugins.statusBarNotification.notify(contacts[0].displayName + " says:", data['txt']);
-					navigator.notification.alert(data['txt'], null, contacts[0].displayName + " says:", "Ok");
-				else
-					//window.plugins.statusBarNotification.notify(data['from'] + " says:", data['txt']);
-					navigator.notification.alert(data['txt'], null, data['from'] + " says:", "Ok");
-			}, function() {
-				//window.plugins.statusBarNotification.notify(data['from'] + " says:", data['txt']);
-				navigator.notification.alert(data['txt'], null, data['from'] + " says:", "Ok");
-			}, options);
+			window.plugins.statusBarNotification.notify(namePhoneMapping[data['from']] + " says:", {
+				body: data['txt'],
+				tag: 'Open Chat',
+				onclick: function() { OpenChat(data['groupID'] || data['from']); }
+			});
+			//navigator.notification.alert(data['txt'], null, phoneContactsArray[data['from']] + " says:", "Ok");
 		}
 	});
 }
@@ -76,6 +77,34 @@ function sendMessageUI(){
 	sendMessage(message);
 }
 
+function ShowGroupSelect() {
+	$('#contactList').empty();
+	for(var i = 0; i < nearByContacts.length; i++) {
+		if(ChatGroups[chatID] == null || ChatGroups[chatID][nearByContacts[i].number] == null)
+			$('#contactList').append('<option value="' + nearByContacts[i].contactPhone + '">' + nearByContacts[i].contactName + '</option>
+	}
+	$('#groupMembers').multiselect().show();
+}
 
+function ShowGroupMembers() {
+	$('#contactList').empty();
+	var members = ChatGroups[chatID].groupMembers;
+	for(var i = 0; i < members.length; i++) {
+		$('#contactList').append('<option value="' + members[i] + '">' + namePhoneMapping[members[i]] + '</option>
+	}
+	$('#groupMembers').multiselect().show();
+}
 
+function AddMembers() {
+	var members = $('#contactList').val();
+	socket.emit('group-chat', { groupID: chatID, members: members }, function(groupID) {
+		chatID = groupID;
+	});
+}
 
+function CancelAction() {
+	if(chatID == 0)
+		return $("#pagePort").load("chat.html", function(){ });
+	
+	$('#groupMembers').hide();
+}

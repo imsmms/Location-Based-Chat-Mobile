@@ -3,7 +3,13 @@
 
 <script type="text/javascript">
 	getUserLocation();
+	InitializeGroupChats();
 </script>
 
-
+<div>
+	<select id="groupChats" onchange="OpenGroupChat()">
+		<option>Group Chat</option>
+		<option id="0">Create New</option>
+	</select>
+</div>
 <div id="geoLocation"></div>

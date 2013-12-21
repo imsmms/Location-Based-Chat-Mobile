@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-
+<style>select { height: 90%; } option { height: 30px }</style>
 <script type="text/javascript">
 	$.mobile.loadingMessage = false;
-	$(document).ready(function() { Inizialize(chatID)});
+	$(document).ready(function() { Initialize()});
 </script>
-
-
-
-
+<div id="groupMembers" style="width: 90%;margin: 65px auto;z-index=1000">
+	<select multiple id="contactList" style="width: 100%"></select><br />
+	<input type="button" value="Submit" style="width:49%;margin:0" onclick="AddMembers()" />
+	<input type="button" value="Cancel" style="width:49%;margin:0" onclick="CancelAction()" />
+</div>
 <div
 	style="width: 100%; position: absolute; background-color: #304446; top: 0px; height: 60px;">
 	<img alt="" src="img/user.png"
@@ -18,6 +19,10 @@
 	<div
 		style="position: absolute; left: 60px; top: 30px; color: white; font-size: 10px;"
 		id="friendStatus">online</div>
+	<div id="manageGroup" style="float:right">
+		<input id="addMembers" type="button" value="+" onclick="ShowGroupSelect()" />
+		<input id="removeMembers" type="button" value="-" onclick="ShowGroupMembers()" />
+	</div>
 </div>
 <div id="chatarea"
 	style="width: 100%; position: absolute; bottom: 50px; overflow-y: scroll;"></div>

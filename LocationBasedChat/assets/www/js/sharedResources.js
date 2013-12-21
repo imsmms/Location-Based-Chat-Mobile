@@ -18,6 +18,7 @@ var isnearBy = false;
 var chatID;
 //Stubbed user ID
 var userId;
+var ChatGroups;
 
 /**
  * Contact Model
@@ -30,6 +31,12 @@ var Contact = {
 	contactMail : "",
 	contactPhoto : "",
 	contactLocation : {}
+};
+
+var Group = {
+	groupName = "",
+	grouId = "",
+	groupMembers = []
 };
 
 /**
@@ -52,6 +59,6 @@ var Location_Error = "Sorry can't load your location!!";
  * URLs
  */
 
-var BASE_URL = "http://location-based-chat.herokuapp.com";
+var BASE_URL = "http://location-based-chat-stag.herokuapp.com";
 var NEAR_CONTACTS_API = "/near/";
 var REGISTER_API = "/register/";
