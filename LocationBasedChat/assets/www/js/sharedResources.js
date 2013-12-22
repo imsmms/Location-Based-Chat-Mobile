@@ -19,6 +19,10 @@ var chatID;
 //Stubbed user ID
 var userId;
 
+var groupChatIDs = [];
+var groupChatCounter = 0;
+var groupChatFlag = false;
+
 /**
  * Contact Model
  */
@@ -52,6 +56,6 @@ var Location_Error = "Sorry can't load your location!!";
  * URLs
  */
 
-var BASE_URL = "http://location-based-chat.herokuapp.com";
+var BASE_URL = "http://location-based-chat-stag.herokuapp.com";
 var NEAR_CONTACTS_API = "/near/";
 var REGISTER_API = "/register/";

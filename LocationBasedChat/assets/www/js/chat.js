@@ -7,20 +7,30 @@ var socket;
 var receiver_id;
 
 function Inizialize(receiver){
-	$("#friendName").html(namePhoneMapping[chatID]);
+	if(groupChatFlag){
+		var friends = "";
+		for(var i=0;i<groupChatIDs.length;i++){
+			friends += namePhoneMapping[groupChatIDs[i]];
+		}
+		$("#friendName").html(friends);
+		$("#friendStatus").html("Group");
+	}else{
+		$("#friendName").html(namePhoneMapping[chatID]);
+	}
+	
 	
 	var chatareaheight = parseInt($(window).height()) - 102;
 	$("#chatarea").css("max-height",chatareaheight+"px");
 	touchScroll('chatarea');
 	var url = BASE_URL;
 	socket = io.connect(BASE_URL);
-	socket.emit('chat', {id: chatID});
+	socket.emit('register', {id: userId});
 	socket.on('message', function(data) {
 		if(data['from'] == null && data['from'] == '')
 			return;
-		if(data['from'] == receiver_id) {
-			appendMessageToLog(data['txt'], data['from']);
-			displayChatBubbles(message,false);
+		if(data['from'] == chatID) {
+			//appendMessageToLog(data['txt'], data['from']);
+			displayChatBubbles(namePhoneMapping[chatID] + ": " + data['txt'],false);
 		} else {
 			var options = new ContactFindOptions();
 			options.filter=data['from'];          // empty search string returns all contacts
@@ -40,6 +50,21 @@ function Inizialize(receiver){
 			}, options);
 		}
 	});
+	
+//	setInterval(recieveMessage,1000);
+}
+/**
+ * PlanB
+ */
+function recieveMessage(){
+	var url = BASE_URL + CHAT_RECIEVE + chatID + "/" + userId;
+	$.getJSON(url,recieveMessageSuccess).fail(function() {
+	    console.log( "error" );
+	  });
+}
+
+function recieveMessageSuccess(data){
+	displayChatBubbles(data.message,false);
 }
 
 function sendMessage(message){
@@ -47,6 +72,18 @@ function sendMessage(message){
 		return;
 	socket.emit('message', {to:chatID, txt:message});
 	appendMessageToLog(message, 0);
+	
+	/**
+	 * PlanB
+	 */
+//	var url = BASE_URL + CHAT_SEND + message + "/" + chatID;
+//	$.getJSON(url,sendMessageSuccess).fail(function() {
+//	    console.log( "error" );
+//	  });
+}
+
+function sendSuccess(){
+	console.log("Message sent!!");
 }
 
 function appendMessageToLog(message, sender) {
@@ -75,7 +112,6 @@ function sendMessageUI(){
 	displayChatBubbles(message,true);
 	sendMessage(message);
 }
-
 
 
 
