@@ -18,7 +18,11 @@ var isnearBy = false;
 var chatID;
 //Stubbed user ID
 var userId;
-var ChatGroups;
+var ChatGroups = { };
+
+var groupChatIDs = [];
+var groupChatCounter = 0;
+var groupChatFlag = false;
 
 /**
  * Contact Model
@@ -34,9 +38,9 @@ var Contact = {
 };
 
 var Group = {
-	groupName = "",
-	grouId = "",
-	groupMembers = []
+	groupName: "",
+	grouId: "",
+	groupMembers: []
 };
 
 /**

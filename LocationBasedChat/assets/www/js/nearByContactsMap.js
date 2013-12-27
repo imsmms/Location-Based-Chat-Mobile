@@ -93,6 +93,8 @@ function createInfoWindowContent(name,id){
 	infoWindow += "	<div style=\"position: absolute; left: 60px; top: 30px; color: black; font-size: 10px;\"";
 	infoWindow += "	id=\"friendStatus\">friend status<\/div>";
 	infoWindow += "	<button style=\"position: absolute; top: 60px; left: 8px; right: 8px;\"";
+	infoWindow += "	onclick=\"addToGroup(this.id)\" id=\""+id+"_"+"\">Add to group<\/button>";
+	infoWindow += "	<button style=\"position: absolute; top: 60px; left: 8px; right: 8px;\"";
 	infoWindow += "	onclick=\"OpenChat(this.id)\" id=\""+id+"\">Chat<\/button>";
 	infoWindow += "	<\/div><\/div>";
 	return infoWindow;
@@ -100,10 +102,21 @@ function createInfoWindowContent(name,id){
 
 
 function OpenChat(id){
-	chatID = id;
+	if(groupChatFlag){
+		groupChatIDs[groupChatCounter] = id;
+	}else{
+		chatID = id;
+	}
+	
 	//window.location = "chat.html";
 	$("#pagePort").load("chat.html", function(){
 	});
+}
+
+function addToGroup(id){
+	groupChatIDs[groupChatCounter] = id;
+	groupChatCounter++;
+	groupChatFlag = true;
 }
 
 /**
@@ -111,7 +124,7 @@ function OpenChat(id){
  * @param loc
  */
 function getNearByContacts(loc){
-	var url = BASE_URL + NEAR_CONTACTS_API + userId + "/" + loc.pb +"/" + loc.ob + "/5";
+	var url = BASE_URL + NEAR_CONTACTS_API + userId + "/" + loc.ob +"/" + loc.nb + "/5";
 	console.log(url);
 	$.getJSON(url,getNearByContactsSuccess).fail(function() {
 	    console.log( "error" );
@@ -135,8 +148,8 @@ function getNearByContactsSuccess(data){
 	for(var i = 0;i<data.contacts.length;i++){
 		contactObj.name = namePhoneMapping[data.contacts[i].number];
 		contactObj.number = data.contacts[i].number;
-		var lat = data.contacts[i].position[0];
-		var lng = data.contacts[i].position[1];
+		var lat = data.contacts[i].loc.coordinates[1];
+		var lng = data.contacts[i].loc.coordinates[0];
 		var contactLoc = new google.maps.LatLng(lat, lng);
 		contactObj.position = contactLoc;
 		createMarker(contactObj,"67F097");

@@ -44,11 +44,12 @@ var NotificationMessenger = function() { }
  * @param body Body of the notification
  * @deprecated Use the W3C standard window.Notification API instead.
  */
-NotificationMessenger.prototype.notify = function(title, body, flag) {
+NotificationMessenger.prototype.notify = function(title, body, flag, onclickfn) {
     if (window.Notification) {
         this.activeNotification = new window.Notification(title, {
             body: body,
-            flag: flag
+            flag: flag,
+            onclick: onclickfn
         });
     }
 }

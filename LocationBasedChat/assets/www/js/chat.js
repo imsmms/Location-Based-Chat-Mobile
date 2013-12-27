@@ -3,26 +3,33 @@
  */
 
 var messageLog = [];
+var newChatID = '';
 
 function Initialize(){
-	$("#friendName").html(namePhoneMapping[chatID]);
+	if(groupChatFlag){
+		InitGroupChat();
+	}else{
+		$("#friendName").html(namePhoneMapping[chatID]);
+	}
 	var chatareaheight = parseInt($(window).height()) - 102;
 	$("#chatarea").css("max-height",chatareaheight+"px");
 	touchScroll('chatarea');
 	
 	var url = BASE_URL;
-	if(socket == null)
+	if(socket == null) {
 		socket = io.connect(BASE_URL);
+	}
+	socket.emit('register', {id: userId});
 	
-	if(chatID === "0")
+	if(chatID === "0") {
 		ShowGroupSelect();
-		$("#friendName").html("Group Chat");
 		$('#manageGroup').show();
 	}
-	socket.emit('chat', {id: userId});
+	
 	socket.on('message', function(data) {
 		if(data['from'] == null || data['from'] == '')
 			return;
+
 		if (data['groupID'] && data['groupID'] == chatID) {
 			appendMessageToLog(data['txt'], data['from']);
 			var tmpMsg = (namePhoneMapping[data['from']] ? namePhoneMapping[data['from']] : data['from'])
@@ -33,14 +40,26 @@ function Initialize(){
 			appendMessageToLog(data['txt'], data['from']);
 			displayChatBubbles(data['txt'],false);
 		} else {
-			window.plugins.statusBarNotification.notify(namePhoneMapping[data['from']] + " says:", {
-				body: data['txt'],
-				tag: 'Open Chat',
-				onclick: function() { OpenChat(data['groupID'] || data['from']); }
-			});
+			newChatID = data['groupID'] || data['from'];
+			window.plugins.statusBarNotification.notify(namePhoneMapping[data['from']] + " says:", data['txt'], 0, switchChat);
 			//navigator.notification.alert(data['txt'], null, phoneContactsArray[data['from']] + " says:", "Ok");
 		}
 	});
+	
+//	setInterval(recieveMessage,1000);
+}
+/**
+ * PlanB
+ */
+function recieveMessage(){
+	var url = BASE_URL + CHAT_RECIEVE + chatID + "/" + userId;
+	$.getJSON(url,recieveMessageSuccess).fail(function() {
+	    console.log( "error" );
+	  });
+}
+
+function recieveMessageSuccess(data){
+	displayChatBubbles(data.message,false);
 }
 
 function sendMessage(message){
@@ -48,6 +67,18 @@ function sendMessage(message){
 		return;
 	socket.emit('message', {to:chatID, txt:message});
 	appendMessageToLog(message, 0);
+	
+	/**
+	 * PlanB
+	 */
+//	var url = BASE_URL + CHAT_SEND + message + "/" + chatID;
+//	$.getJSON(url,sendMessageSuccess).fail(function() {
+//	    console.log( "error" );
+//	  });
+}
+
+function sendSuccess(){
+	console.log("Message sent!!");
 }
 
 function appendMessageToLog(message, sender) {
@@ -80,8 +111,9 @@ function sendMessageUI(){
 function ShowGroupSelect() {
 	$('#contactList').empty();
 	for(var i = 0; i < nearByContacts.length; i++) {
-		if(ChatGroups[chatID] == null || ChatGroups[chatID][nearByContacts[i].number] == null)
-			$('#contactList').append('<option value="' + nearByContacts[i].contactPhone + '">' + nearByContacts[i].contactName + '</option>
+		console.log(JSON.stringify(nearByContacts));
+		if(ChatGroups[chatID] == null || !ChatGroups[chatID].members.contains([nearByContacts[i].number]))
+			$('#contactList').append('<option value="' + nearByContacts[i].contactPhone + '">' + nearByContacts[i].contactName + '</option>');
 	}
 	$('#groupMembers').multiselect().show();
 }
@@ -90,21 +122,40 @@ function ShowGroupMembers() {
 	$('#contactList').empty();
 	var members = ChatGroups[chatID].groupMembers;
 	for(var i = 0; i < members.length; i++) {
-		$('#contactList').append('<option value="' + members[i] + '">' + namePhoneMapping[members[i]] + '</option>
+		$('#contactList').append('<option value="' + members[i] + '">' + namePhoneMapping[members[i]] + '</option>');
 	}
 	$('#groupMembers').multiselect().show();
 }
 
 function AddMembers() {
 	var members = $('#contactList').val();
-	socket.emit('group-chat', { groupID: chatID, members: members }, function(groupID) {
-		chatID = groupID;
-	});
+	if(chatID === "0") {
+		socket.emit('create-group', { id: userID }, function(groupID) {
+			chatID = groupID;
+		});
+	}
+	
+	socket.emit('add-to-group', { group: chatID, numbers: members });
+	InitGroupChat();
 }
 
 function CancelAction() {
-	if(chatID == 0)
-		return $("#pagePort").load("chat.html", function(){ });
+	console.log('ChatID: ' + chatID);
+	if(chatID === "0")
+		return $("#pagePort").load("nearByContactsMap.html", function(){ });
 	
 	$('#groupMembers').hide();
+}
+
+function InitGroupChat() {
+	var friends = "";
+	for(var i=0;i<ChatGroups[chatID].members.length;i++){
+		friends += namePhoneMapping[ChatGroups[chatID].members[i]] + ',';
+	}
+	$("#friendName").html(friends);
+	$("#friendStatus").html("Group");
+}
+
+function switchChat() {
+	openChat(newChatID);
 }
