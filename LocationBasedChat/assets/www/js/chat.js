@@ -3,26 +3,22 @@
  */
 
 var messageLog = [];
-var newChatID = '';
 
 function Initialize(){
+	if(socket == null) {
+		var url = BASE_URL;
+		socket = io.connect(BASE_URL);
+	}
+	socket.emit('register', {id: userId});
+	
 	if(groupChatFlag){
 		InitGroupChat();
 	}else{
 		$("#friendName").html(namePhoneMapping[chatID]);
-		var url = BASE_URL;
-		socket = io.connect(BASE_URL);
-		socket.emit('register', {id: userId});
 	}
 	var chatareaheight = parseInt($(window).height()) - 102;
 	$("#chatarea").css("max-height",chatareaheight+"px");
 	touchScroll('chatarea');
-	
-	var url = BASE_URL;
-	if(socket == null) {
-		socket = io.connect(BASE_URL);
-	}
-	socket.emit('register', {id: userId});
 	
 	if(chatID === "0") {
 		ShowGroupSelect();
@@ -107,6 +103,7 @@ $(document).keypress(function(e) {
 
 function sendMessageUI(){
 	var message = $("#chatinput").val();
+	$("#chatinput").val('');
 	displayChatBubbles(message,true);
 	sendMessage(message);
 }
@@ -151,22 +148,24 @@ function CancelAction() {
 }
 
 function InitGroupChat() {
-	if(chatID == '') {
-		var url = BASE_URL;
-		socket = io.connect(BASE_URL);
+	alert(chatID);
+	if(chatID == null) {
 		socket.emit('create-group', {id: userId},function(groupID){
 			chatID = groupID;
 			socket.emit('add-to-group',{group:chatID , numbers:groupChatIDs});
-			ChatGroups[chatID] = new Group() { groupID: chatID, groupMembers: groupChatIDs }
+			ChatGroups[chatID] = new Group();
+			ChatGroups[chatID].groupID = chatID;
+			ChatGroups[chatID].groupMembers= groupChatIDs;
 		});
 	}
-	
+	var members = ChatGroups[chatID] == null ? groupChatIDs : ChatGroups[chatID].groupMembers;
 	var friends = "";
-	for(var i=0;i<ChatGroups[chatID].groupMembers.length;i++) {
-		friends += namePhoneMapping[ChatGroups[chatID].groupMembers[i]] + ',';
+	for(var i=0;i<members.length;i++) {
+		friends += namePhoneMapping[members[i]] + ',';
 	}
-	$("#friendName").html(friends);
-	$("#friendStatus").html("Group");
+	friends += userName;
+	$("#friendName").html("Group");
+	$("#friendStatus").html(friends);
 }
 
 function switchChat() {

@@ -16,9 +16,11 @@ var nearByContacts = [];
 var namePhoneMapping = {};
 var isnearBy = false;
 var chatID;
+var newChatID;
 //Stubbed user ID
 var userId;
 var ChatGroups = { };
+var socket;
 
 //Back button handling
 var pageHistory = [];
