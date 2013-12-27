@@ -18,6 +18,10 @@ var isnearBy = false;
 var chatID;
 //Stubbed user ID
 var userId;
+//Back button handling
+var pageHistory = [];
+//Markers
+var markersArray = [];
 
 var groupChatIDs = [];
 var groupChatCounter = 0;

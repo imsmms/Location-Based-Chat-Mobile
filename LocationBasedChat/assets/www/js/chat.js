@@ -9,22 +9,29 @@ var receiver_id;
 function Inizialize(receiver){
 	if(groupChatFlag){
 		var friends = "";
-		for(var i=0;i<groupChatIDs.length;i++){
-			friends += namePhoneMapping[groupChatIDs[i]];
+		for(var i=0;i < groupChatIDs.length;i++){
+			friends += " " + namePhoneMapping[groupChatIDs[i]];
 		}
 		$("#friendName").html(friends);
 		$("#friendStatus").html("Group");
+		var url = BASE_URL;
+		socket = io.connect(BASE_URL);
+		socket.emit('create-group', {id: userId},function(groupID){
+			chatID = groupID;
+			socket.emit('add-to-group',{group:chatID , numbers:groupChatIDs});
+		});
 	}else{
 		$("#friendName").html(namePhoneMapping[chatID]);
+		var url = BASE_URL;
+		socket = io.connect(BASE_URL);
+		socket.emit('register', {id: userId});
 	}
 	
 	
 	var chatareaheight = parseInt($(window).height()) - 102;
 	$("#chatarea").css("max-height",chatareaheight+"px");
 	touchScroll('chatarea');
-	var url = BASE_URL;
-	socket = io.connect(BASE_URL);
-	socket.emit('register', {id: userId});
+	
 	socket.on('message', function(data) {
 		if(data['from'] == null && data['from'] == '')
 			return;

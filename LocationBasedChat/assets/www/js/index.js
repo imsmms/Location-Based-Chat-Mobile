@@ -49,16 +49,28 @@ function onDeviceReady() {
 			//window.location = "nearByContactsMap.html";
 		}else{
 			$("#pagePort").load("registration.html", function(){
-				$('body').css("background-image","none");
+				$('#pagePort').trigger("create");
+				initializeRegisteration();
 			});
 			//window.location = "registration.html";
 		}
 		break;
 	case 3://trial
 		$("#pagePort").load("registration.html", function(){
-			$('body').css("background-image","none");
+			$('#pagePort').trigger("create");
+			initializeRegisteration();
 		});
 		//window.location = "registration.html";
 	}
 	
 }
+
+document.addEventListener("backbutton", function(e){
+	if(pageHistory.length == 0){
+		navigator.app.exitApp();
+	}else{
+		$("#pagePort").load(pageHistory.pop(), function(){
+			$('#pagePort').trigger("create");
+		});
+	}
+});
