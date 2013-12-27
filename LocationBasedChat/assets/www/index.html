@@ -24,6 +24,12 @@
 <meta name="viewport"
 	content="initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,width=device-width,height=device-height,target-densitydpi=device-dpi,user-scalable=yes" />
 
+<link href="css/bubbles.css" rel="stylesheet">
+<link href="css/jquery.mobile-1.3.1.css" rel="stylesheet">
+<link href="css/jquery.mobile.theme-1.3.1.css" rel="stylesheet">
+<link href="css/jquery.mobile.structure-1.3.1.css" rel="stylesheet">
+<link href="css/register.css" rel="stylesheet">
+
 <script type="text/javascript"
 	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC1zLRRsngMXTI9VXujReJKtcFWic6Lyhc&sensor=true">
 	
@@ -52,6 +58,7 @@
 	//document.addEventListener('deviceready', onDeviceReady, false);
 </script>
 
+<<<<<<< HEAD
 <link href="css/jquery.mobile-1.3.1.css" rel="stylesheet">
 <link href="css/jquery.mobile.theme-1.3.1.css" rel="stylesheet">
 <link href="css/jquery.mobile.structure-1.3.1.css" rel="stylesheet">
@@ -60,8 +67,18 @@
 <style>
 body { font-size: 20px }
 input, option, textarea { height: 40px; font-size: 18px }
+=======
+>>>>>>> upstream/master
 </head>
 <body>
-	<div id="pagePort"></div>
+	<div data-role="page">
+		<div data-role="panel" id="mypanel" data-display="push"
+			data-position="left" data-theme="a">
+			<ul data-role="listview">
+				<li><a onclick="hideMyLocation()">Hide My Location</a></li>
+			</ul>
+		</div>
+		<div id="pagePort" data-role="content" id="mycontent" style="height: 100%;"></div>
+	</div>
 </body>
 </html>

@@ -19,8 +19,9 @@ function getUserLocationSuccess(position){
 	var myLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
 	console.log(JSON.stringify(myLocation));
-	$("#geoLocation").height(window.screen.height);
-	$("#geoLocation").width($(window).width);
+	var geolochight = parseInt(window.screen.height) - 50;
+	$("#geoLocation").height(geolochight);
+	//$("#geoLocation").width($(window).width);
 	map  = new google.maps.Map(document.getElementById('geoLocation'), {
 		mapTypeId: google.maps.MapTypeId.ROADMAP,
 		center: myLocation,
@@ -77,6 +78,8 @@ function createMarker(markerObj,pinColor){
 		infowindow.open(map, marker);
 	});
 	
+	markersArray.push(marker);
+	
 	/*google.maps.event.addListener(infowindow, 'closeclick', function () {
 		window.location = "chat.html";
 	});*/
@@ -84,7 +87,7 @@ function createMarker(markerObj,pinColor){
 
 
 function createInfoWindowContent(name,id){
-	var infoWindow="<div style=\"width:320px; height:100px;\">";
+	var infoWindow="<div style=\"width:320px; height:140px;\">";
 	infoWindow += "	<div style=\"width: 100%; position: absolute; top: 0px; height: 80px;\">";
 	infoWindow += "<img alt=\"\" src=\"img\/user.png\"";
 	infoWindow += "	style=\"width: 40px; height: 40px; position: absolute; top: 10px; left: 10px;\">";
@@ -94,7 +97,7 @@ function createInfoWindowContent(name,id){
 	infoWindow += "	id=\"friendStatus\">friend status<\/div>";
 	infoWindow += "	<button style=\"position: absolute; top: 60px; left: 8px; right: 8px;\"";
 	infoWindow += "	onclick=\"addToGroup(this.id)\" id=\""+id+"_"+"\">Add to group<\/button>";
-	infoWindow += "	<button style=\"position: absolute; top: 60px; left: 8px; right: 8px;\"";
+	infoWindow += "	<div style='height : 10px'><\/div><button style=\"position: absolute; top: 85px; left: 8px; right: 8px;\"";
 	infoWindow += "	onclick=\"OpenChat(this.id)\" id=\""+id+"\">Chat<\/button>";
 	infoWindow += "	<\/div><\/div>";
 	return infoWindow;
@@ -103,20 +106,26 @@ function createInfoWindowContent(name,id){
 
 function OpenChat(id){
 	if(groupChatFlag){
-		groupChatIDs[groupChatCounter] = id;
+		groupChatIDs[groupChatCounter] = id.split("_")[0];
 	}else{
 		chatID = id;
 	}
 	
 	//window.location = "chat.html";
+	pageHistory.push("nearByContactsMap.html");
 	$("#pagePort").load("chat.html", function(){
+		$('#pagePort').trigger("create");
 	});
 }
 
 function addToGroup(id){
-	groupChatIDs[groupChatCounter] = id;
+	groupChatIDs[groupChatCounter] = id.split("_")[0];
 	groupChatCounter++;
 	groupChatFlag = true;
+	
+	for(var i=0;i<markersArray.length;i++){
+		markersArray[i].infowindow.close();
+	}
 }
 
 /**
@@ -172,16 +181,6 @@ function fillNearByContacts(data){
 	}
 }
 
-function InitializeGroupChats() {
-	for(var group in ChatGroups) {
-		$('#groupChats').append('<option value="' + group.groupId +
-			'">' + group.Name + '</option>');
-	}
-}
-
-function OpenGroupChat() {
-	var group = $('#groupChats').val();
-	chatID = group;
-	$("#pagePort").load("chat.html", function(){
-	});
+function openMenu(){
+	$("#mypanel").panel("open");
 }

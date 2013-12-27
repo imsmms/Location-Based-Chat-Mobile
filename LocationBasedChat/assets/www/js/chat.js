@@ -10,6 +10,9 @@ function Initialize(){
 		InitGroupChat();
 	}else{
 		$("#friendName").html(namePhoneMapping[chatID]);
+		var url = BASE_URL;
+		socket = io.connect(BASE_URL);
+		socket.emit('register', {id: userId});
 	}
 	var chatareaheight = parseInt($(window).height()) - 102;
 	$("#chatarea").css("max-height",chatareaheight+"px");
@@ -148,9 +151,19 @@ function CancelAction() {
 }
 
 function InitGroupChat() {
+	if(chatID == '') {
+		var url = BASE_URL;
+		socket = io.connect(BASE_URL);
+		socket.emit('create-group', {id: userId},function(groupID){
+			chatID = groupID;
+			socket.emit('add-to-group',{group:chatID , numbers:groupChatIDs});
+			ChatGroups[chatID] = new Group() { groupID: chatID, groupMembers: groupChatIDs }
+		});
+	}
+	
 	var friends = "";
-	for(var i=0;i<ChatGroups[chatID].members.length;i++){
-		friends += namePhoneMapping[ChatGroups[chatID].members[i]] + ',';
+	for(var i=0;i<ChatGroups[chatID].groupMembers.length;i++) {
+		friends += namePhoneMapping[ChatGroups[chatID].groupMembers[i]] + ',';
 	}
 	$("#friendName").html(friends);
 	$("#friendStatus").html("Group");

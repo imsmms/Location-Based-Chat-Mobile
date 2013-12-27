@@ -3,6 +3,11 @@
  * logic related to the registration process
  */
 
+function initializeRegisteration(){
+	var regheight = parseInt($("#wrap").height());
+	var top = (parseInt(window.screen.height)/2) - (regheight/2);
+	$("#wrap").css("top",top);
+}
 
 /**
  * registerUser is the function that initiates the registration process
@@ -10,9 +15,9 @@
 function registerUser(){
 	userName = $("#userNameID").val();//"Ibrahim";
 	phoneNumber = $("#userPhoneNumber").val();//"01026357328";
-	
+
 	validateRegisterationInfo(userName,phoneNumber);
-	
+
 	getPhoneContacts();
 }
 
@@ -77,9 +82,11 @@ function getPhoneContactsSuccess(contacts){
 		//window.location = "nearByContactsMap.html";
 		$("#pagePort").load("nearByContactsMap.html", function(){
 			$('body').css("background-image","none");
+			$('#pagePort').trigger("create");
 		});
 		return;
 	}
+	console.log("hello geo");
 	getMyLocation();
 }
 
@@ -90,14 +97,16 @@ function getMyLocation(){
 function getCurrentPositionSuccess(position){
 	var lat = position.coords.latitude;
 	var lng = position.coords.longitude;
-	
-	
+
+
 	var url = BASE_URL + REGISTER_API + userName + "/" + phoneNumber + "/" + lng + "/" + lat + "/" + JSON.stringify(phoneContactsArray);
-	
-	
+
+	console.log(url);
 	$.getJSON(url,function(data){
 		console.log(data.id);
 		saveUserId(data.id);
+	}).fail(function() {
+		console.log( "error" );
 	});
 }
 
@@ -116,6 +125,8 @@ function saveUserId(id){
 	localStorage.setItem("UserID", id);
 	if(localStorage.getItem("UserID")){
 		$("#pagePort").load("nearByContactsMap.html", function(){
+			$('body').css("background-image","none");
+			$('#pagePort').trigger("create");
 		});
 		return true;
 	}
@@ -128,6 +139,6 @@ function getUserId(){
 		return true;
 	}
 	return false;
-	
-	
+
+
 }

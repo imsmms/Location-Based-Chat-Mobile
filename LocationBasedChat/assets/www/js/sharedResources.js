@@ -20,6 +20,11 @@ var chatID;
 var userId;
 var ChatGroups = { };
 
+//Back button handling
+var pageHistory = [];
+//Markers
+var markersArray = [];
+
 var groupChatIDs = [];
 var groupChatCounter = 0;
 var groupChatFlag = false;
