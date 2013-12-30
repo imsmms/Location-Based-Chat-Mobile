@@ -7,6 +7,12 @@ function initializeRegisteration(){
 	var regheight = parseInt($("#wrap").height());
 	var top = (parseInt(window.screen.height)/2) - (regheight/2);
 	$("#wrap").css("top",top);
+	console.log($('body').height()+" : "+$('body').width());
+	$('#pagePort').height(parseInt(window.innerHeight));
+	$('#pagePort').css("background-image","url('img/map.jpg')");
+	$('#pagePort').css("background-repeat","no-repeat");
+	$('#pagePort').css("background-size","100% 100%");
+	console.log($('#pagePort').height()+" : "+$('#pagePort').width());
 }
 
 /**
@@ -81,7 +87,7 @@ function getPhoneContactsSuccess(contacts){
 	if(isnearBy){
 		//window.location = "nearByContactsMap.html";
 		$("#pagePort").load("nearByContactsMap.html", function(){
-			$('body').css("background-image","none");
+			$('#pagePort').css("background-image","none");
 			$('#pagePort').trigger("create");
 		});
 		return;
@@ -125,7 +131,7 @@ function saveUserId(id){
 	localStorage.setItem("UserID", id);
 	if(localStorage.getItem("UserID")){
 		$("#pagePort").load("nearByContactsMap.html", function(){
-			$('body').css("background-image","none");
+			$('#pagePort').css("background-image","none");
 			$('#pagePort').trigger("create");
 		});
 		return true;

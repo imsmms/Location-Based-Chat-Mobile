@@ -19,9 +19,9 @@
 
 function initialize() {
 
-	//google.maps.event.addDomListener(window, 'load', function(){
+	google.maps.event.addDomListener(window, 'load', function(){
 		setup();
-	//});
+	});
 
 }
 
@@ -61,14 +61,16 @@ function onDeviceReady() {
 		});
 		//window.location = "registration.html";
 	}
+	document.addEventListener("backbutton", function(e){
+		if(pageHistory.length == 0){
+			navigator.app.exitApp();
+			console.log("exitttt");
+		}else{
+			$("#pagePort").load(pageHistory.pop(), function(){
+				$('#pagePort').trigger("create");
+			});
+			console.log("back");
+		}
+	},false);
 }
 
-document.addEventListener("backbutton", function(e){
-	if(pageHistory.length == 0){
-		navigator.app.exitApp();
-	}else{
-		$("#pagePort").load(pageHistory.pop(), function(){
-			$('#pagePort').trigger("create");
-		});
-	}
-});
