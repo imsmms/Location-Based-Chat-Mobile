@@ -11,19 +11,18 @@ function Initialize(){
 	}
 	socket.emit('register', {id: userId});
 	
-	if(groupChatFlag){
+	if(groupChatFlag) {
 		InitGroupChat();
-	}else{
+		$('#leaveGroup').show();
+		if(chatID === "0" || ChatGroups[chatID].isAdmin) {
+			$('#manageGroup').show();
+		}
+	} else {
 		$("#friendName").html(namePhoneMapping[chatID]);
 	}
 	var chatareaheight = parseInt($(window).height()) - 102;
 	$("#chatarea").css("max-height",chatareaheight+"px");
 	touchScroll('chatarea');
-	
-	if(chatID === "0") {
-		ShowGroupSelect();
-		$('#manageGroup').show();
-	}
 	
 	socket.on('message', function(data) {
 		if(data['from'] == null || data['from'] == '')
@@ -129,21 +128,13 @@ function ShowGroupMembers() {
 
 function AddMembers() {
 	var members = $('#contactList').val();
-	if(chatID === "0") {
-		socket.emit('create-group', { id: userID }, function(groupID) {
-			chatID = groupID;
-		});
-	}
-	
 	socket.emit('add-to-group', { group: chatID, numbers: members });
+	foreach(var member in members)
+		GroupChats[chatID].groupMembers.push(member);
 	InitGroupChat();
 }
 
 function CancelAction() {
-	console.log('ChatID: ' + chatID);
-	if(chatID === "0")
-		return $("#pagePort").load("nearByContactsMap.html", function(){ });
-	
 	$('#groupMembers').hide();
 }
 
@@ -156,6 +147,7 @@ function InitGroupChat() {
 			ChatGroups[chatID] = new Group();
 			ChatGroups[chatID].groupID = chatID;
 			ChatGroups[chatID].groupMembers= groupChatIDs;
+			ChatGroups[chatID].isAdmin = true;
 		});
 	}
 	var members = ChatGroups[chatID] == null ? groupChatIDs : ChatGroups[chatID].groupMembers;
@@ -164,10 +156,16 @@ function InitGroupChat() {
 		friends += namePhoneMapping[members[i]] + ',';
 	}
 	friends += userName;
-	$("#friendName").html("Group");
+	$("#friendName").html(ChatGroups[chatID] ? ChatGroups[chatID].groupName : "Group");
 	$("#friendStatus").html(friends);
 }
 
 function switchChat() {
 	openChat(newChatID);
+}
+
+function LeaveGroup() {
+	socket.emit('leave-group', { groupID: chatID });
+	GroupChats[chatID] = null;
+	chatID = null;
 }

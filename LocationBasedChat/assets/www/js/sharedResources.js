@@ -47,7 +47,8 @@ var Contact = {
 var Group = {
 	groupName: "",
 	grouId: "",
-	groupMembers: []
+	groupMembers: [],
+	isAdmin: false
 };
 
 /**
