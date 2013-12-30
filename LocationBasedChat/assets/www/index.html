@@ -43,6 +43,7 @@
 <script type="text/javascript" src="js/sharedResources.js"></script>
 <script type="text/javascript" src="js/registration.js"></script>
 <script type="text/javascript" src="js/chat.js"></script>
+<script type="text/javascript" src="js/chatNotification.js"></script>
 <script type="text/javascript" src="js/nearByContactsMap.js"></script>
 <script type="text/javascript" src="js/touchscroll.js"></script>
 <script type="text/javascript" src="js/index.js"></script>
@@ -64,14 +65,22 @@ input, option, textarea { height: 40px; font-size: 18px }
 </style>
 </head>
 <body>
-	<div data-role="page">
+	<div data-role="page" id="mypage" style="height: 100%">
 		<div data-role="panel" id="mypanel" data-display="push"
 			data-position="left" data-theme="a">
 			<ul data-role="listview">
+				<li><a onclick="getUserLocation()">Refresh NearBy Friends</a></li>
 				<li><a onclick="hideMyLocation()">Hide My Location</a></li>
+				<li><a onclick="showMyLocation()">Show My Location</a></li>
 			</ul>
 		</div>
-		<div id="pagePort" data-role="content" id="mycontent" style="height: 100%;"></div>
+		<div data-role="panel" id="myrightpanel" data-display="push"
+			data-position="right" data-theme="a">
+			<ul data-role="listview" id="rightlist">
+
+			</ul>
+		</div>
+		<div id="pagePort" data-role="content"></div>
 	</div>
 </body>
 </html>

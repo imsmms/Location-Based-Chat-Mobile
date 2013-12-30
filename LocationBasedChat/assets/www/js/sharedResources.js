@@ -26,6 +26,8 @@ var socket;
 var pageHistory = [];
 //Markers
 var markersArray = [];
+//chat history
+var chatHistory = {};
 
 var groupChatIDs = [];
 var groupChatCounter = 0;
