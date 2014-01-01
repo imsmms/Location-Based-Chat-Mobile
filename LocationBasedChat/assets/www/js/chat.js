@@ -168,4 +168,5 @@ function LeaveGroup() {
 	socket.emit('leave-group', { groupID: chatID });
 	GroupChats[chatID] = null;
 	chatID = null;
+	$('#pagePort').load('nearbycontactsmap.html', function() {});
 }

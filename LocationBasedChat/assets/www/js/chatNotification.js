@@ -12,10 +12,13 @@ $(document).ready(function() {
 				namePhoneMapping[data.by] + ' has added you to a group. Do you want to join?',
 				function(btn) {
 					if(btn == 1) {
-					GroupChat[data.groupID] = new Group();
-					GroupChat[data.groupID].groupID = data.groupID;
-					GroupChat[data.groupID].groupName = data.groupName;
-					GroupChat[data.groupID].groupMembers = Members;
+						GroupChat[data.groupID] = new Group();
+						GroupChat[data.groupID].groupID = data.groupID;
+						GroupChat[data.groupID].groupName = data.groupName;
+						GroupChat[data.groupID].groupMembers = Members;
+					} else {
+						socket.emit('leave-group', { groupID: data.groupID });
+					}
 				},
 				'Group Invite',
 				'Join,Leave'
