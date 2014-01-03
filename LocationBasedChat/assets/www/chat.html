@@ -21,10 +21,12 @@
 	<div
 		style="position: absolute; left: 60px; top: 30px; color: white; font-size: 10px;"
 		id="friendStatus">online</div>
-	<div id="manageGroup" style="float:right;display:none">
+	<div id="groupChat" style="float:right;display:none">
 		<input id="leaveGroup" type="button" value="X" onclick="LeaveGroup()" />
-		<input id="addMembers" type="button" value="+" onclick="ShowGroupSelect()" />
-		<input id="removeMembers" type="button" value="-" onclick="ShowGroupMembers()" />
+		<div id="manageGroup">
+			<input id="addMembers" type="button" value="+" onclick="ShowGroupSelect()" />
+			<input id="removeMembers" type="button" value="-" onclick="ShowGroupMembers()" />
+		</div>
 	</div>
 </div>
 <div id="chatarea"

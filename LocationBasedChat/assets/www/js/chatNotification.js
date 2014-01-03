@@ -3,7 +3,7 @@ $(document).ready(function() {
 	socket.on('message', function(data) {
 		if(data['from'] == null && data['from'] == '')
 			return;
-		window.plugins.statusBarNotification.notify(phoneContactsArray[data['from']] + " says:", data['txt'], 0);
+		window.plugins.statusBarNotification.notify(namePhoneMapping[data['from']] || data['from'] + " says:", data['txt'], 0);
 		//navigator.notification.alert(data['txt'], null, data['from'] + " says:", "Ok");
 	});
 	socket.on('notification', function(data) {
@@ -12,31 +12,29 @@ $(document).ready(function() {
 			addNewOnlineUserToMap(data);
 			break;
 		case 1:
-			if(GroupChat[data.groupID] == null) {
-				navigator.notification.confirm(
-					namePhoneMapping[data.by] + ' has added you to a group. Do you want to join?',
-					function(btn) {
-						if(btn == 1) {
-							GroupChat[data.groupID] = new Group();
-							GroupChat[data.groupID].groupID = data.groupID;
-							GroupChat[data.groupID].groupName = data.groupName;
-							GroupChat[data.groupID].groupMembers = data.members;
-						} else {
-							socket.emit('leave-group', { groupID: data.groupID });
-						}
-					},
-					'Group Invite',
-					'Join,Leave'
-				);
-			} else {
-				foreach(member in data.members)
-					GroupChat[data.groupID].groupMembers.push(member);
-			}
+			navigator.notification.confirm(
+				namePhoneMapping[data.by] + ' has added you to a group. Do you want to join?',
+				function(btn) {
+					if(btn == 1) {
+						GroupChat[data.group] = new Group();
+						GroupChat[data.group].groupID = data.group;
+						GroupChat[data.group].groupName = data.groupName;
+						GroupChat[data.group].groupMembers = data.members;
+					} else {
+						socket.emit('leave-group', { group: data.group });
+					}
+				},
+				'Group Invite',
+				'Join,Leave'
+			);
 			break;
 		case 2:
-			GroupChat[data.groupID] = null;
-			if(data.groupID == chatID)
+			GroupChat[data.group] = null;
+			if(data.group == chatID)
 				$('#pagePort').load('nearbycontactsmap.html', function() {});
+			break;
+		case 3:
+				GroupChat[data.group].groupMembers.push(data.member);
 			break;
 		default:
 			break;

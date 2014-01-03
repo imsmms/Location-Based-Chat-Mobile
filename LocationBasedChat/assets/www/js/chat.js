@@ -17,7 +17,7 @@ function Initialize(){
 		var url = BASE_URL;
 		socket = io.connect(BASE_URL);
 	}
-	socket.emit('register', {id: userId});
+	socket.emit('register', {id: userId}, function() { return; });
 	
 	if(groupChatFlag) {
 		InitGroupChat();
@@ -36,7 +36,7 @@ function Initialize(){
 		if(data['from'] == null || data['from'] == '')
 			return;
 
-		if (data['groupID'] && data['groupID'] == chatID) {
+		if (data['group'] && data['group'] == chatID) {
 			appendMessageToLog(data['txt'], data['from']);
 			var tmpMsg = (namePhoneMapping[data['from']] ? namePhoneMapping[data['from']] : data['from'])
 				+ ": " + data['txt'];
@@ -169,7 +169,7 @@ function InitGroupChat() {
 			socket.emit('add-to-group',{group: chatID , members: groupChatIDs});
 			ChatGroups[chatID] = new Group();
 			ChatGroups[chatID].groupID = chatID;
-			ChatGroups[chatID].groupMembers= groupChatIDs;
+			ChatGroups[chatID].groupMembers = groupChatIDs;
 			ChatGroups[chatID].isAdmin = true;
 		});
 	}
@@ -188,7 +188,7 @@ function switchChat() {
 }
 
 function LeaveGroup() {
-	socket.emit('leave-group', { groupID: chatID });
+	socket.emit('leave-group', { group: chatID });
 	GroupChats[chatID] = null;
 	chatID = null;
 	$('#pagePort').load('nearbycontactsmap.html', function() {});
