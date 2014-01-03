@@ -7,9 +7,9 @@ var chatHistoryCounter = 0;
 
 function Initialize(){
 	
-	if(chatHistory[chatID].length > 0){
-		for(var i=0;i<chatHistory[chatID].length;i++){
-			displayChatBubbles(chatHistory[chatID+"__"][i].isSender,chatHistory[chatID][i].message,true);
+	if(chatHistory[chatHistoryIndex].length > 0){
+		for(var i=0;i<chatHistory[chatHistoryIndex].length;i++){
+			displayChatBubbles(chatHistory[chatHistoryIndex][i].isSender,chatHistory[chatHistoryIndex][i].message,true);
 		}
 	}
 	
@@ -101,8 +101,8 @@ function displayChatBubbles(message,isSender,isHistory){
 	}
 	$("#chatarea").append(appendedHTML);
 	if(!isHistory){
-		chatHistory[chatID+"__"][chatHistoryCounter].isSender = isSender;
-		chatHistory[chatID+"__"][chatHistoryCounter].message = message;
+		chatHistory[chatHistoryIndex][chatHistoryCounter].isSender = isSender;
+		chatHistory[chatHistoryIndex][chatHistoryCounter].message = message;
 	}
 	chatHistoryCounter++;
 }
