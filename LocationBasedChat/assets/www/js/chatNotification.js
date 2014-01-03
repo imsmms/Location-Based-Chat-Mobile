@@ -7,6 +7,8 @@ $(document).ready(function() {
 		//navigator.notification.alert(data['txt'], null, data['from'] + " says:", "Ok");
 	});
 	socket.on('notification', function(data) {
+		if(data.event != 'add-to-group')
+			return;
 		if(GroupChat[data.groupID] == null) {
 			navigator.notification.confirm(
 				namePhoneMapping[data.by] + ' has added you to a group. Do you want to join?',
@@ -24,7 +26,7 @@ $(document).ready(function() {
 				'Join,Leave'
 			);
 		} else {
-			foreach(var member in data.members)
+			foreach(member in data.members)
 				GroupChat[data.groupID].groupMembers.push(member);
 		}
 	});

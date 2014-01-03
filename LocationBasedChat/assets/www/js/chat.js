@@ -142,7 +142,7 @@ function ShowGroupMembers() {
 function AddMembers() {
 	var members = $('#contactList').val();
 	socket.emit('add-to-group', { group: chatID, numbers: members });
-	foreach(var member in members)
+	foreach(member in members)
 		GroupChats[chatID].groupMembers.push(member);
 	InitGroupChat();
 }
