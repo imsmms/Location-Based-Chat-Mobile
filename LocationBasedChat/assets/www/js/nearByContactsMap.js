@@ -220,8 +220,8 @@ function addNewOnlineUserToMap(data){
 	var contactObj = {};
 	contactObj.name = namePhoneMapping[data.contact];
 	contactObj.number = data.contact;
-	var lat = data.loc[1];
-	var lng = data.loc[0];
+	var lat = parseFloat(data.loc[1]);
+	var lng = parseFloat(data.loc[0]);
 	var contactLoc = new google.maps.LatLng(lat, lng);
 	contactObj.position = contactLoc;
 	createMarker(contactObj,"67F097");
