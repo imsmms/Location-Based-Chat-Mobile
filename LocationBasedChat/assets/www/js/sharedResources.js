@@ -33,6 +33,13 @@ var groupChatIDs = [];
 var groupChatCounter = 0;
 var groupChatFlag = false;
 
+//Notification Object
+var notifyMeObject = {
+		"near-by" : 0,
+		"add-to-group" : 1,
+		"remove-from-group" : 2
+}
+
 /**
  * Contact Model
  */
