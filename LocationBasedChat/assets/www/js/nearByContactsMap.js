@@ -119,11 +119,13 @@ function OpenChat(id){
 		var chatItem = "<li><a onclick=\"openChatWindowFromHistory(this.id)\" id=\""+group+"__"+"\">"+group+"<\/a><\/li>";
 		$("#rightlist").append(chatItem);
 		chatHistory[group+"__"] = [];
+		chatHistoryIndex = group+"__";
 	}else{
 		chatID = id;
 		var chatItem = "<li><a onclick=\"openChatWindowFromHistory(this.id)\" id=\""+id+"__"+"\">"+namePhoneMapping[id]+"<\/a><\/li>";
 		$("#rightlist").append(chatItem);
 		chatHistory[id+"__"] = [];
+		chatHistoryIndex = id+"__";
 	}
 	
 	//window.location = "chat.html";
@@ -134,7 +136,7 @@ function OpenChat(id){
 }
 
 function openChatWindowFromHistory(id){
-	chatID = id.split("_")[0];
+	chatHistoryIndex = id;
 	pageHistory.push("nearByContactsMap.html");
 	$("#pagePort").load("chat.html", function(){
 		$('#pagePort').trigger("create");
@@ -220,8 +222,8 @@ function addNewOnlineUserToMap(data){
 	var contactObj = {};
 	contactObj.name = namePhoneMapping[data.contact];
 	contactObj.number = data.contact;
-	var lat = data.loc[1];
-	var lng = data.loc[0];
+	var lat = parseFloat(data.loc[1]);
+	var lng = parseFloat(data.loc[0]);
 	var contactLoc = new google.maps.LatLng(lat, lng);
 	contactObj.position = contactLoc;
 	createMarker(contactObj,"67F097");

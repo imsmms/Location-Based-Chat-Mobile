@@ -28,6 +28,7 @@ var pageHistory = [];
 var markersArray = [];
 //chat history
 var chatHistory = {};
+var chatHistoryIndex = "";
 
 var groupChatIDs = [];
 var groupChatCounter = 0;
