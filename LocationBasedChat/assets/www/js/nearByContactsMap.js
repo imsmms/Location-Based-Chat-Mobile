@@ -200,11 +200,32 @@ function getNearByContactsSuccess(data){
 }
 
 function fillNearByContacts(data){
-	for(var i = 0;i<data.contacts.length;i++){
-		nearByContacts[i] = new Contact();
-		nearByContacts[i].contactPhone = data.contacts[i].number;
-		nearByContacts[i].contactName = namePhoneMapping[data.contacts[i].number];
+	if(data.contacts){
+		for(var i = 0;i<data.contacts.length;i++){
+			nearByContacts[i] = new Contact();
+			nearByContacts[i].contactPhone = data.contacts[i].number;
+			nearByContacts[i].contactName = namePhoneMapping[data.contacts[i].number];
+		}
+	}else{
+		var newContact = new Contact();
+		nearByContacts[nearByContacts.length] = new Contact();
+		newContact.contactPhone = data.contacts[i].number;
+		newContact.contactName = namePhoneMapping[data.contacts[i].number];
+		nearByContacts.push(newContact);
 	}
+	
+}
+
+function addNewOnlineUserToMap(data){
+	var contactObj = {};
+	contactObj.name = namePhoneMapping[data.contact];
+	contactObj.number = data.contact;
+	var lat = data.loc[1];
+	var lng = data.loc[0];
+	var contactLoc = new google.maps.LatLng(lat, lng);
+	contactObj.position = contactLoc;
+	createMarker(contactObj,"67F097");
+	fillNearByContacts(data);
 }
 
 function openMenu(){

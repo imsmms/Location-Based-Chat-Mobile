@@ -128,6 +128,7 @@ function ShowGroupSelect() {
 			$('#contactList').append('<option value="' + nearByContacts[i].contactPhone + '">' + nearByContacts[i].contactName + '</option>');
 	}
 	$('#groupMembers').multiselect().show();
+	$('#btnManage').click = AddMembers;
 }
 
 function ShowGroupMembers() {
@@ -137,13 +138,22 @@ function ShowGroupMembers() {
 		$('#contactList').append('<option value="' + members[i] + '">' + namePhoneMapping[members[i]] + '</option>');
 	}
 	$('#groupMembers').multiselect().show();
+	$('#btnManage').click = RemoveMembers;
 }
 
 function AddMembers() {
 	var members = $('#contactList').val();
-	socket.emit('add-to-group', { group: chatID, numbers: members });
+	socket.emit('add-to-group', { group: chatID, members: members });
 	foreach(member in members)
 		GroupChats[chatID].groupMembers.push(member);
+	InitGroupChat();
+}
+
+function RemoveMembers() {
+	var members = $('#contactList').val();
+	socket.emit('remove-from-group', { group: chatID, members: members });
+	foreach(member in members)
+		GroupChats[chatID].groupMembers.remove(member);
 	InitGroupChat();
 }
 
@@ -156,7 +166,7 @@ function InitGroupChat() {
 	if(chatID == null) {
 		socket.emit('create-group', {id: userId},function(groupID){
 			chatID = groupID;
-			socket.emit('add-to-group',{group:chatID , numbers:groupChatIDs});
+			socket.emit('add-to-group',{group: chatID , members: groupChatIDs});
 			ChatGroups[chatID] = new Group();
 			ChatGroups[chatID].groupID = chatID;
 			ChatGroups[chatID].groupMembers= groupChatIDs;

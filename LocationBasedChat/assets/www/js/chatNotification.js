@@ -7,27 +7,37 @@ $(document).ready(function() {
 		//navigator.notification.alert(data['txt'], null, data['from'] + " says:", "Ok");
 	});
 	socket.on('notification', function(data) {
-		if(data.event != 'add-to-group')
-			return;
-		if(GroupChat[data.groupID] == null) {
-			navigator.notification.confirm(
-				namePhoneMapping[data.by] + ' has added you to a group. Do you want to join?',
-				function(btn) {
-					if(btn == 1) {
-						GroupChat[data.groupID] = new Group();
-						GroupChat[data.groupID].groupID = data.groupID;
-						GroupChat[data.groupID].groupName = data.groupName;
-						GroupChat[data.groupID].groupMembers = Members;
-					} else {
-						socket.emit('leave-group', { groupID: data.groupID });
-					}
-				},
-				'Group Invite',
-				'Join,Leave'
-			);
-		} else {
-			foreach(member in data.members)
-				GroupChat[data.groupID].groupMembers.push(member);
+		switch (notifyMeObject[data.event]){
+		case 0:
+			addNewOnlineUserToMap(data);
+			break;
+		case 1:
+			if(GroupChat[data.groupID] == null) {
+				navigator.notification.confirm(
+					namePhoneMapping[data.by] + ' has added you to a group. Do you want to join?',
+					function(btn) {
+						if(btn == 1) {
+							GroupChat[data.groupID] = new Group();
+							GroupChat[data.groupID].groupID = data.groupID;
+							GroupChat[data.groupID].groupName = data.groupName;
+							GroupChat[data.groupID].groupMembers = data.members;
+						} else {
+							socket.emit('leave-group', { groupID: data.groupID });
+						}
+					},
+					'Group Invite',
+					'Join,Leave'
+				);
+			} else {
+				foreach(member in data.members)
+					GroupChat[data.groupID].groupMembers.push(member);
+			}
+			break;
+		case 2:
+			GroupChat[data.groupID] = null;
+			break;
+		default:
+			break;
 		}
 	});
 });
