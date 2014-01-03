@@ -3,8 +3,16 @@
  */
 
 var messageLog = [];
+var chatHistoryCounter = 0;
 
 function Initialize(){
+	
+	if(chatHistory[chatID].length > 0){
+		for(var i=0;i<chatHistory[chatID].length;i++){
+			displayChatBubbles(chatHistory[chatID+"__"][i].isSender,chatHistory[chatID][i].message,true);
+		}
+	}
+	
 	if(socket == null) {
 		var url = BASE_URL;
 		socket = io.connect(BASE_URL);
@@ -32,11 +40,11 @@ function Initialize(){
 			appendMessageToLog(data['txt'], data['from']);
 			var tmpMsg = (namePhoneMapping[data['from']] ? namePhoneMapping[data['from']] : data['from'])
 				+ ": " + data['txt'];
-			displayChatBubbles(tmpMsg,false);
+			displayChatBubbles(tmpMsg,false,false);
 		}
 		else if(data['from'] && data['from'] == chatID) {
 			appendMessageToLog(data['txt'], data['from']);
-			displayChatBubbles(data['txt'],false);
+			displayChatBubbles(data['txt'],false,false);
 		} else {
 			newChatID = data['groupID'] || data['from'];
 			window.plugins.statusBarNotification.notify(namePhoneMapping[data['from']] + " says:", data['txt'], 0, switchChat);
@@ -57,7 +65,7 @@ function recieveMessage(){
 }
 
 function recieveMessageSuccess(data){
-	displayChatBubbles(data.message,false);
+	displayChatBubbles(data.message,false,false);
 }
 
 function sendMessage(message){
@@ -83,7 +91,7 @@ function appendMessageToLog(message, sender) {
 	messageLog.push({ Message: message, Sender: sender });
 }
 
-function displayChatBubbles(message,isSender){
+function displayChatBubbles(message,isSender,isHistory){
 	var appendedHTML = "";
 	if(isSender){
 		appendedHTML = "<p class=\"triangle-border right\">"+message+"<\/p>";
@@ -92,6 +100,11 @@ function displayChatBubbles(message,isSender){
 		appendedHTML = "<p class=\"triangle-border left\">"+message+"<\/p>";
 	}
 	$("#chatarea").append(appendedHTML);
+	if(!isHistory){
+		chatHistory[chatID+"__"][chatHistoryCounter].isSender = isSender;
+		chatHistory[chatID+"__"][chatHistoryCounter].message = message;
+	}
+	chatHistoryCounter++;
 }
 
 $(document).keypress(function(e) {
@@ -103,7 +116,7 @@ $(document).keypress(function(e) {
 function sendMessageUI(){
 	var message = $("#chatinput").val();
 	$("#chatinput").val('');
-	displayChatBubbles(message,true);
+	displayChatBubbles(message,true,false);
 	sendMessage(message);
 }
 

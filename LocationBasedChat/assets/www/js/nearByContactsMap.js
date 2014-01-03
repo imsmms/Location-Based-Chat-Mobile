@@ -116,17 +116,25 @@ function OpenChat(id){
 		while(group == null){
 			group = prompt("Please enter group name","");
 		}
-		var chatItem = "<li><a onclick=\"getUserLocation()\" id=\""+group+"\">"+group+"<\/a><\/li>";
+		var chatItem = "<li><a onclick=\"openChatWindowFromHistory(this.id)\" id=\""+group+"__"+"\">"+group+"<\/a><\/li>";
 		$("#rightlist").append(chatItem);
-		chatHistory[group] = [];
+		chatHistory[group+"__"] = [];
 	}else{
 		chatID = id;
-		var chatItem = "<li><a onclick=\"getUserLocation()\" id=\""+id+"__"+"\">"+namePhoneMapping[id]+"<\/a><\/li>";
+		var chatItem = "<li><a onclick=\"openChatWindowFromHistory(this.id)\" id=\""+id+"__"+"\">"+namePhoneMapping[id]+"<\/a><\/li>";
 		$("#rightlist").append(chatItem);
 		chatHistory[id+"__"] = [];
 	}
 	
 	//window.location = "chat.html";
+	pageHistory.push("nearByContactsMap.html");
+	$("#pagePort").load("chat.html", function(){
+		$('#pagePort').trigger("create");
+	});
+}
+
+function openChatWindowFromHistory(id){
+	chatID = id.split("_")[0];
 	pageHistory.push("nearByContactsMap.html");
 	$("#pagePort").load("chat.html", function(){
 		$('#pagePort').trigger("create");
