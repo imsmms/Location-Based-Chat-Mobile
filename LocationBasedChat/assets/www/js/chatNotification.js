@@ -35,6 +35,8 @@ $(document).ready(function() {
 			break;
 		case 2:
 			GroupChat[data.groupID] = null;
+			if(data.groupID == chatID)
+				$('#pagePort').load('nearbycontactsmap.html', function() {});
 			break;
 		default:
 			break;

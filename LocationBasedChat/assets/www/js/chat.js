@@ -128,7 +128,7 @@ function ShowGroupSelect() {
 			$('#contactList').append('<option value="' + nearByContacts[i].contactPhone + '">' + nearByContacts[i].contactName + '</option>');
 	}
 	$('#groupMembers').multiselect().show();
-	$('#btnManage').click = AddMembers;
+	$('#btnManage').click(AddMembers);
 }
 
 function ShowGroupMembers() {
@@ -138,7 +138,7 @@ function ShowGroupMembers() {
 		$('#contactList').append('<option value="' + members[i] + '">' + namePhoneMapping[members[i]] + '</option>');
 	}
 	$('#groupMembers').multiselect().show();
-	$('#btnManage').click = RemoveMembers;
+	$('#btnManage').click(RemoveMembers);
 }
 
 function AddMembers() {
