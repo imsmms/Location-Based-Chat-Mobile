@@ -36,6 +36,17 @@ $(document).ready(function() {
 		case 3:
 				GroupChat[data.group].groupMembers.push(data.member);
 			break;
+		case 4:
+			GroupChat[data.group].groupMembers.remove(data.member);
+			if(chatID == data.group)
+				InitGroupChat();
+			break;
+		case 5:
+			navigator.notification.alert("You have been removed from a group", null, "Remove Notification", "OK");
+			if(chatID == data.group)
+				$('#pagePort').load('nearbycontactsmap.html', function() { });
+			GroupChat[data.group] = null;
+			break;
 		default:
 			break;
 		}
