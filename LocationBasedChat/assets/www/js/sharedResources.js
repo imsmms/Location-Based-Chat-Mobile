@@ -38,7 +38,7 @@ var groupChatFlag = false;
 var notifyMeObject = {
 		"near-by" : 0,
 		"add-to-group" : 1,
-		"remove-from-group" : 2,
+		"remove-member" : 2,
 		"new-member": 3
 }
 

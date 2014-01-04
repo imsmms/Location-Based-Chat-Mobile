@@ -69,6 +69,7 @@ function onDeviceReady() {
 			$("#pagePort").load(pageHistory.pop(), function(){
 				$('#pagePort').trigger("create");
 				chatID = 0;
+				groupChatFlag = false;
 			});
 			console.log("back");
 		}

@@ -7,10 +7,19 @@ var chatHistoryCounter = 0;
 
 function Initialize(){
 	
-	if(chatHistory[chatHistoryIndex].length > 0){
-		for(var i=0;i<chatHistory[chatHistoryIndex].length;i++){
-			displayChatBubbles(chatHistory[chatHistoryIndex][i].isSender,chatHistory[chatHistoryIndex][i].message,true);
+	console.log("Hello chat");
+	
+	$(document).keyup(function(e) {
+		if(e.which == 13) {
+			sendMessageUI();
 		}
+	});
+	
+	if(chatHistory[chatHistoryIndex].history.length > 0){
+		for(var i=0;i<chatHistory[chatHistoryIndex].history.length;i++){
+			displayChatBubbles(chatHistory[chatHistoryIndex].history[i].message,chatHistory[chatHistoryIndex].history[i].isSender,true);
+		}
+		console.log("History fill");
 	}
 	
 	if(socket == null) {
@@ -26,10 +35,20 @@ function Initialize(){
 			$('#manageGroup').show();
 		}
 	} else {
-		$("#friendName").html(namePhoneMapping[chatID]);
+		if(namePhoneMapping[chatID]){
+			$("#friendName").html(namePhoneMapping[chatID]);
+		}else{
+			$("#friendName").html(chatID);
+		}
+		
 	}
 	var chatareaheight = parseInt($(window).height()) - 102;
 	$("#chatarea").css("max-height",chatareaheight+"px");
+	/*var chatinputWidth = parseInt($(window).width()) - 40;
+	var chatimgWidth = 40;
+	$("#chatinput").css("width",chatinputWidth+"px");
+	$("#chatImgID").css("width",chatimgWidth+"px");*/
+	
 	touchScroll('chatarea');
 	
 	socket.on('message', function(data) {
@@ -92,6 +111,8 @@ function appendMessageToLog(message, sender) {
 }
 
 function displayChatBubbles(message,isSender,isHistory){
+	if(message == '')
+		return;
 	var appendedHTML = "";
 	if(isSender){
 		appendedHTML = "<p class=\"triangle-border right\">"+message+"<\/p>";
@@ -101,17 +122,9 @@ function displayChatBubbles(message,isSender,isHistory){
 	}
 	$("#chatarea").append(appendedHTML);
 	if(!isHistory){
-		chatHistory[chatHistoryIndex][chatHistoryCounter].isSender = isSender;
-		chatHistory[chatHistoryIndex][chatHistoryCounter].message = message;
+		chatHistory[chatHistoryIndex].history.push({"isSender" : isSender,"message" : message});
 	}
-	chatHistoryCounter++;
 }
-
-$(document).keypress(function(e) {
-	if(e.which == 13) {
-		sendMessageUI();
-	}
-});
 
 function sendMessageUI(){
 	var message = $("#chatinput").val();

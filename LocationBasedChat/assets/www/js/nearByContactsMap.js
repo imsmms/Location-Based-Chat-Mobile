@@ -113,18 +113,28 @@ function OpenChat(id){
 		chatID = group;
 		groupChatIDs[groupChatCounter] = id.split("_")[0];
 		var group = prompt("Please enter group name","");
-		while(group == null){
-			group = prompt("Please enter group name","");
+		if(group == null){
+			return;
 		}
-		var chatItem = "<li><a onclick=\"openChatWindowFromHistory(this.id)\" id=\""+group+"__"+"\">"+group+"<\/a><\/li>";
-		$("#rightlist").append(chatItem);
-		chatHistory[group+"__"] = [];
+		while(group == ''){
+			group = prompt("Please enter group name","");
+			if(group == null){
+				return;
+			}
+		}
+		if(!chatHistory[group+"__"]){
+			var chatItem = "<li><a onclick=\"openChatWindowFromHistory(this.id)\" id=\""+group+"__"+"\">"+group+"<\/a><\/li>";
+			$("#rightlist").append(chatItem);
+			chatHistory[group+"__"] = {"isGroup":true,"history":[]};
+		}
 		chatHistoryIndex = group+"__";
 	}else{
 		chatID = id;
-		var chatItem = "<li><a onclick=\"openChatWindowFromHistory(this.id)\" id=\""+id+"__"+"\">"+namePhoneMapping[id]+"<\/a><\/li>";
-		$("#rightlist").append(chatItem);
-		chatHistory[id+"__"] = [];
+		if(!chatHistory[id+"__"]){
+			var chatItem = "<li><a onclick=\"openChatWindowFromHistory(this.id)\" id=\""+id+"__"+"\">"+namePhoneMapping[id]+"<\/a><\/li>";
+			$("#rightlist").append(chatItem);
+			chatHistory[id+"__"] = {"isGroup":false,"history":[]};
+		}
 		chatHistoryIndex = id+"__";
 	}
 	
@@ -137,6 +147,9 @@ function OpenChat(id){
 
 function openChatWindowFromHistory(id){
 	chatHistoryIndex = id;
+	chatID = id.split("_")[0];
+	groupChatFlag = chatHistory[chatHistoryIndex].isGroup;
+	console.log(chatHistoryIndex);
 	pageHistory.push("nearByContactsMap.html");
 	$("#pagePort").load("chat.html", function(){
 		$('#pagePort').trigger("create");
@@ -194,11 +207,11 @@ function getNearByContactsSuccess(data){
 	fillNearByContacts(data);
 	
 	//fake data
-//	contactObj.name = "Ibrahim";
-//	contactObj.number = "01025600901";
-//	var contactLoc = new google.maps.LatLng(30.02, 31.216);
-//	contactObj.position = contactLoc;
-//	createMarker(contactObj,"67F097");
+	contactObj.name = "Nourhan";
+	contactObj.number = "01067310900";
+	var contactLoc = new google.maps.LatLng(30.02422, 31.21413);
+	contactObj.position = contactLoc;
+	createMarker(contactObj,"67F097");
 }
 
 function fillNearByContacts(data){
