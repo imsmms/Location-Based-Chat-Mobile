@@ -207,11 +207,11 @@ function getNearByContactsSuccess(data){
 	fillNearByContacts(data);
 	
 	//fake data
-	contactObj.name = "Nourhan";
+	/*contactObj.name = "Nourhan";
 	contactObj.number = "01067310900";
 	var contactLoc = new google.maps.LatLng(30.02422, 31.21413);
 	contactObj.position = contactLoc;
-	createMarker(contactObj,"67F097");
+	createMarker(contactObj,"67F097");*/
 }
 
 function fillNearByContacts(data){
