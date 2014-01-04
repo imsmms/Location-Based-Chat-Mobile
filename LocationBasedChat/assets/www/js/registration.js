@@ -22,8 +22,11 @@ function registerUser(){
 	userName = $("#userNameID").val();//"Ibrahim";
 	phoneNumber = $("#userPhoneNumber").val();//"01026357328";
 
-	validateRegisterationInfo(userName,phoneNumber);
+	if(!validateRegisterationInfo(userName,phoneNumber)){
+		return;
+	}
 
+	navigator.notification.activityStart("Please wait for registration process", "loading");
 	getPhoneContacts();
 }
 
@@ -97,7 +100,9 @@ function getPhoneContactsSuccess(contacts){
 }
 
 function getMyLocation(){
-	navigator.geolocation.getCurrentPosition(getCurrentPositionSuccess, getCurrentPositionError);
+	
+	var options = { timeout: 15000, enableHighAccuracy: true, maximumAge: 90000 };
+	navigator.geolocation.getCurrentPosition(getCurrentPositionSuccess, getCurrentPositionError,options);
 }
 
 function getCurrentPositionSuccess(position){
@@ -109,6 +114,7 @@ function getCurrentPositionSuccess(position){
 
 	console.log(url);
 	$.getJSON(url,function(data){
+		navigator.notification.activityStop();
 		console.log(data.id);
 		saveUserId(data.id);
 	}).fail(function() {
@@ -117,6 +123,7 @@ function getCurrentPositionSuccess(position){
 }
 
 function getCurrentPositionError(){
+	navigator.notification.activityStop();
 	alert("Cant load location");
 }
 

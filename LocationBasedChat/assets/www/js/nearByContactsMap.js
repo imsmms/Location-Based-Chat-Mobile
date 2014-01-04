@@ -8,6 +8,7 @@
  * getUserLocation is the function responsible for getting user location
  */
 function getUserLocation(){
+	navigator.notification.activityStart("", "loading Friends NearBy");
 	navigator.geolocation.getCurrentPosition(getUserLocationSuccess, getUserLocationError);
 }
 
@@ -204,6 +205,7 @@ function getNearByContactsSuccess(data){
 		contactObj.position = contactLoc;
 		createMarker(contactObj,"67F097");
 	}
+	navigator.notification.activityStop();
 	fillNearByContacts(data);
 	
 	//fake data
