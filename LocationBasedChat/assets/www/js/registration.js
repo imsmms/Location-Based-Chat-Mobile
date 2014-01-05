@@ -126,7 +126,6 @@ function getCurrentPositionError(){
 	cordova.exec(getCurrentPositionNativeSuccess, function(err) {
 		getCurrentPositionNativeSuccess('null');
 	}, "LocationPlugin", "getLocation", "");
-	navigator.notification.activityStop();
 	//alert("Cant load location");
 }
 
@@ -143,6 +142,9 @@ function getCurrentPositionNativeSuccess(location){
 				longitude : location[1]
 			}
 	};
+	console.log("Hello Geo Native");
+	console.log(JSON.stringify(position));
+	navigator.notification.activityStop();
 	getCurrentPositionSuccess(position);
 }
 
