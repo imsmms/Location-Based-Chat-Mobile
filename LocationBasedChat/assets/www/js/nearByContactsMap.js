@@ -9,7 +9,8 @@
  */
 function getUserLocation(){
 	navigator.notification.activityStart("", "loading Friends NearBy");
-	navigator.geolocation.getCurrentPosition(getUserLocationSuccess, getUserLocationError);
+	var options = { timeout: 5000, enableHighAccuracy: true, maximumAge: 90000 };
+	navigator.geolocation.getCurrentPosition(getUserLocationSuccess, getUserLocationError,options);
 }
 
 /**
@@ -37,8 +38,27 @@ function getUserLocationSuccess(position){
 }
 
 function getUserLocationError(){
-	alert(Location_Error);
+	cordova.exec(getCurrentPositionNearByNativeSuccess, function(err) {
+		getCurrentPositionNearByNativeSuccess('null');
+	}, "LocationPlugin", "getLocation", "");
 }
+
+function getCurrentPositionNearByNativeSuccess(location){
+	
+	if(location == "null"){
+		alert(Location_Error);
+		return;
+	}
+	
+	var position = {
+			coords : {
+				latitude : location[0],
+				longitude : location[1]
+			}
+	};
+	getUserLocationSuccess(position);
+}
+
 
 /**
  * createMarker is the function responsible for creating map pins
