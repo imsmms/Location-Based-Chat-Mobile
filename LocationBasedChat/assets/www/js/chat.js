@@ -4,12 +4,14 @@
 
 var messageLog = [];
 var chatHistoryCounter = 0;
+var isKeyBoardShown = false;
+var isKeyBoardDisappears = false;
 
 function Initialize(){
 	
 	console.log("Hello chat");
 	
-	$(document).keyup(function(e) {
+	$(document).keydown(function(e) {
 		if(e.which == 13) {
 			sendMessageUI();
 		}
@@ -205,4 +207,29 @@ function LeaveGroup() {
 	GroupChats[chatID] = null;
 	chatID = null;
 	$('#pagePort').load('nearbycontactsmap.html', function() {});
+}
+
+window.onresize = function(){
+	console.log("hello Rsize");
+	if(isKeyBoardShown){
+		var windowHightAdj = parseInt($(window).height()) - 20;
+		$("#pagePort").css("height",windowHightAdj);
+		isKeyBoardShown = false;
+	}
+	if(isKeyBoardDisappears){
+		var windowHightAdj = parseInt($(window).height()) - 20;
+		$("#pagePort").css("height",windowHightAdj);
+		isKeyBoardDisappears = false;
+	}
+	
+};
+
+function keyBoardAppears(){
+	console.log("hello shown");
+	isKeyBoardShown = true;
+}
+
+function keyBoardDisappears(){
+	console.log("hello dissapear");
+	isKeyBoardDisappears = true;
 }

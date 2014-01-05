@@ -101,7 +101,7 @@ function getPhoneContactsSuccess(contacts){
 
 function getMyLocation(){
 	
-	var options = { timeout: 15000, enableHighAccuracy: true, maximumAge: 90000 };
+	var options = { timeout: 5000, enableHighAccuracy: true, maximumAge: 90000 };
 	navigator.geolocation.getCurrentPosition(getCurrentPositionSuccess, getCurrentPositionError,options);
 }
 
@@ -123,8 +123,27 @@ function getCurrentPositionSuccess(position){
 }
 
 function getCurrentPositionError(){
+	cordova.exec(getCurrentPositionNativeSuccess, function(err) {
+		getCurrentPositionNativeSuccess('null');
+	}, "LocationPlugin", "getLocation", "");
 	navigator.notification.activityStop();
-	alert("Cant load location");
+	//alert("Cant load location");
+}
+
+function getCurrentPositionNativeSuccess(location){
+	
+	if(location == "null"){
+		alert("Cant load location");
+		return;
+	}
+	
+	var position = {
+			coords : {
+				latitude : location[0],
+				longitude : location[1]
+			}
+	};
+	getCurrentPositionSuccess(position);
 }
 
 function saveUserId(id){
