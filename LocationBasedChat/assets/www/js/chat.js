@@ -28,7 +28,7 @@ function Initialize(){
 		var url = BASE_URL;
 		socket = io.connect(BASE_URL);
 	}
-	socket.emit('register', {id: userId}, function() { return; });
+	//socket.emit('register', {id: userId}, function() { return; });
 	
 	if(groupChatFlag) {
 		InitGroupChat();

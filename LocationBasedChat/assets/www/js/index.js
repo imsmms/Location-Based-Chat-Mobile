@@ -42,6 +42,7 @@ function onDeviceReady() {
 	case 2:
 		if(getUserId()){
 			console.log("nearby");
+			getChatHistory();
 			getPhoneContacts();
 			//navigator.notification.loadingStart();
 			isnearBy = true;
@@ -63,6 +64,11 @@ function onDeviceReady() {
 	}
 	document.addEventListener("backbutton", function(e){
 		if(pageHistory.length == 0){
+			localStorage.setItem("chatHistory", JSON.stringify(chatHistory));
+			if(socket){
+				socket.disconnect();
+			}
+			
 			navigator.app.exitApp();
 			console.log("exitttt");
 		}else{
@@ -76,3 +82,8 @@ function onDeviceReady() {
 	},false);
 }
 
+function getChatHistory(){
+	if(localStorage.getItem("chatHistory")){
+		chatHistory = JSON.parse(localStorage.getItem("chatHistory"));
+	}
+}

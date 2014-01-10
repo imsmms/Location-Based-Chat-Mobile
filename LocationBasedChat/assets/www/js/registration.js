@@ -122,7 +122,8 @@ function getCurrentPositionSuccess(position){
 	});
 }
 
-function getCurrentPositionError(){
+function getCurrentPositionError(data){
+	console.log(JSON.stringify(data));
 	cordova.exec(getCurrentPositionNativeSuccess, function(err) {
 		getCurrentPositionNativeSuccess('null');
 	}, "LocationPlugin", "getLocation", "");

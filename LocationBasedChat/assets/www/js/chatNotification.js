@@ -1,5 +1,14 @@
-$(document).ready(function() {
+function registerNewSocket() {
+	navigator.notification.activityStart("", "loading Friends NearBy");
 	socket = io.connect(BASE_URL);
+	
+	socket.on('connect',function(data){
+		socket.emit('register', {id: userId}, function() { 
+			getUserLocation();
+		});
+	});
+	
+	
 	socket.on('message', function(data) {
 		if(data['from'] == null && data['from'] == '')
 			return;
@@ -7,8 +16,10 @@ $(document).ready(function() {
 		//navigator.notification.alert(data['txt'], null, data['from'] + " says:", "Ok");
 	});
 	socket.on('notification', function(data) {
+		console.log("Notification!!!");
 		switch (notifyMeObject[data.event]){
 		case 0:
+			console.log("NearBy Notification!!!");
 			addNewOnlineUserToMap(data);
 			break;
 		case 1:
@@ -40,4 +51,4 @@ $(document).ready(function() {
 			break;
 		}
 	});
-});
+}

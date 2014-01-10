@@ -8,7 +8,7 @@
  * getUserLocation is the function responsible for getting user location
  */
 function getUserLocation(){
-	navigator.notification.activityStart("", "loading Friends NearBy");
+	//navigator.notification.activityStart("", "loading Friends NearBy");
 	var options = { timeout: 5000, enableHighAccuracy: true, maximumAge: 90000 };
 	navigator.geolocation.getCurrentPosition(getUserLocationSuccess, getUserLocationError,options);
 }
@@ -219,6 +219,9 @@ function getNearByContactsSuccess(data){
 	for(var i = 0;i<data.contacts.length;i++){
 		contactObj.name = namePhoneMapping[data.contacts[i].number];
 		contactObj.number = data.contacts[i].number;
+		if(!contactObj.name){
+			contactObj.name = namePhoneMapping["+2"+data.contacts[i].number];
+		}
 		var lat = data.contacts[i].loc.coordinates[1];
 		var lng = data.contacts[i].loc.coordinates[0];
 		var contactLoc = new google.maps.LatLng(lat, lng);
@@ -229,11 +232,11 @@ function getNearByContactsSuccess(data){
 	fillNearByContacts(data);
 	
 	//fake data
-	contactObj.name = "Nourhan";
+	/*contactObj.name = "Nourhan";
 	contactObj.number = "01067310900";
 	var contactLoc = new google.maps.LatLng(30.02422, 31.21413);
 	contactObj.position = contactLoc;
-	createMarker(contactObj,"67F097");
+	createMarker(contactObj,"67F097");*/
 }
 
 function fillNearByContacts(data){
@@ -246,8 +249,8 @@ function fillNearByContacts(data){
 	}else{
 		var newContact = new Contact();
 		nearByContacts[nearByContacts.length] = new Contact();
-		newContact.contactPhone = data.contacts[i].number;
-		newContact.contactName = namePhoneMapping[data.contacts[i].number];
+		newContact.contactPhone = data.contact;
+		newContact.contactName = namePhoneMapping[data.contact];
 		nearByContacts.push(newContact);
 	}
 	
@@ -256,6 +259,11 @@ function fillNearByContacts(data){
 function addNewOnlineUserToMap(data){
 	var contactObj = {};
 	contactObj.name = namePhoneMapping[data.contact];
+	
+	if(!contactObj.name){
+		contactObj.name = namePhoneMapping["+2"+data.contact];
+	}
+	
 	contactObj.number = data.contact;
 	var lat = parseFloat(data.loc[1]);
 	var lng = parseFloat(data.loc[0]);

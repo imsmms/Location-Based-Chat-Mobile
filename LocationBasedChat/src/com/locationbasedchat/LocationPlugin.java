@@ -6,6 +6,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import android.content.Context;
+import android.location.Criteria;
+import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -47,6 +49,8 @@ public class LocationPlugin extends CordovaPlugin {
 		// Acquire a reference to the system Location Manager
 		LocationManager locationManager = (LocationManager) context
 				.getSystemService(Context.LOCATION_SERVICE);
+
+
 
 		// Define a listener that responds to location updates
 		LocationListener locationListener = new LocationListener() {
@@ -91,9 +95,39 @@ public class LocationPlugin extends CordovaPlugin {
 			}
 		};
 
+
 		// Register the listener with the Location Manager to receive location
 		// updates
-		locationManager.requestLocationUpdates(
-				LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+
+		Criteria criteria = new Criteria();
+		String bestProvider = locationManager.getBestProvider(criteria, false);
+
+		locationManager.requestLocationUpdates(bestProvider, 0, 0, locationListener);
+
+
+		//locationManager.requestLocationUpdates(
+		//		LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+		Location loc = locationManager.getLastKnownLocation(bestProvider);
+		Log.d(LocationPlugin.class.getSimpleName(), "getLocation() Ends");
+
+		Log.d(LocationPlugin.class.getSimpleName(), "getLocation() Ends" + String.valueOf(loc.getLatitude()));
+
+		try {
+			if (callback != null) {
+
+				JSONArray jsonLocation = new JSONArray();
+
+
+				jsonLocation.put(loc.getLatitude());
+
+				jsonLocation.put(loc.getLongitude());
+
+				callback.success(jsonLocation);
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 }
