@@ -29,19 +29,14 @@ function registerNewSocket() {
 				namePhoneMapping[data.by] + ' has added you to a group. Do you want to join?',
 				function(btn) {
 					if(btn == 1) {
-						alert("hello" + data.group);
-						GroupChats[data.group] = new Group();
-						alert("hello1");
-						GroupChats[data.group].groupID = data.group;
-						alert("hello2");
-						GroupChats[data.group].groupName = data.groupName;
-						alert("hello3");
-						GroupChats[data.group].groupMembers = data.members;
+						ChatGroups[data.group] = new Group();
+						ChatGroups[data.group].groupID = data.group;
+						ChatGroups[data.group].groupName = data.groupName;
+						ChatGroups[data.group].groupMembers = data.members;
 						pageHistory.push("nearByContactsMap.html");
 						$("#pagePort").load("chat.html", function(){
 							$('#pagePort').trigger("create");
 						});
-						alert("hello4");
 					} else {
 						socket.emit('leave-group', { group: data.group });
 					}
@@ -51,15 +46,16 @@ function registerNewSocket() {
 			);
 			break;
 		case 2:
-			GroupChat[data.group] = null;
+			ChatGroups[data.group] = null;
 			if(data.group == chatID)
 				$('#pagePort').load('nearbycontactsmap.html', function() {});
 			break;
 		case 3:
-				GroupChat[data.group].groupMembers.push(data.member);
+				if(ChatGroups[data.group])
+					ChatGroups[data.group].groupMembers.push(data.member);
 			break;
 		case 4:
-			GroupChat[data.group].groupMembers.remove(data.member);
+			ChatGroups[data.group].groupMembers.remove(data.member);
 			if(chatID == data.group)
 				InitGroupChat();
 			break;
@@ -67,7 +63,7 @@ function registerNewSocket() {
 			navigator.notification.alert("You have been removed from a group", null, "Remove Notification", "OK");
 			if(chatID == data.group)
 				$('#pagePort').load('nearbycontactsmap.html', function() { });
-			GroupChat[data.group] = null;
+			ChatGroups[data.group] = null;
 			break;
 		default:
 			break;

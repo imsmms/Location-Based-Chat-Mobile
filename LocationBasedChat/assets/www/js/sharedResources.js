@@ -59,12 +59,12 @@ var Contact = {
 
 var GroupChats = [];
 
-var Group = {
-	groupName: "",
-	grouId: "",
-	groupMembers: [],
-	isAdmin: false
-};
+function Group() {
+	this.groupName = "";
+	this.grouId = "";
+	this.groupMembers = [];
+	this.isAdmin = false;
+}
 
 /**
  * Defining the environment 

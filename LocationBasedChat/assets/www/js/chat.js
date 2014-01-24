@@ -17,7 +17,7 @@ function Initialize(){
 		}
 	});
 	
-	if(chatHistory[chatHistoryIndex].history.length > 0){
+	if(chatHistory[chatHistoryIndex] && chatHistory[chatHistoryIndex].history.length > 0){
 		for(var i=0;i<chatHistory[chatHistoryIndex].history.length;i++){
 			displayChatBubbles(chatHistory[chatHistoryIndex].history[i].message,chatHistory[chatHistoryIndex].history[i].isSender,true);
 		}
@@ -33,7 +33,7 @@ function Initialize(){
 	if(groupChatFlag) {
 		InitGroupChat();
 		$('#leaveGroup').show();
-		if(chatID === "0" || ChatGroups[chatID].isAdmin) {
+		if(chatID === null || ChatGroups[chatID].isAdmin) {
 			$('#manageGroup').show();
 		}
 	} else {
@@ -177,7 +177,6 @@ function CancelAction() {
 }
 
 function InitGroupChat() {
-	alert(chatID);
 	if(chatID == null) {
 		socket.emit('create-group', {id: userId},function(groupID){
 			chatID = groupID;
