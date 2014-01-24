@@ -76,7 +76,7 @@ function createMarker(markerObj,pinColor){
 	var marker = new google.maps.Marker({
 		map: map,
 		position: markerObj.position,
-		title:markerObj.position.ob + ", " + markerObj.position.pb,
+		title:markerObj.position.d + ", " + markerObj.position.e,
 		icon: pinImage
 	}); 
 	//var infowindow;
@@ -195,7 +195,7 @@ function addToGroup(id){
  * @param loc
  */
 function getNearByContacts(loc){
-	var url = BASE_URL + NEAR_CONTACTS_API + userId + "/" + loc.ob +"/" + loc.nb + "/5";
+	var url = BASE_URL + NEAR_CONTACTS_API + userId + "/" + loc.e +"/" + loc.d + "/5";
 	console.log(url);
 	$.getJSON(url,getNearByContactsSuccess).fail(function() {
 	    console.log( "error" );

@@ -57,6 +57,8 @@ var Contact = {
 	contactLocation : {}
 };
 
+var GroupChats = [];
+
 var Group = {
 	groupName: "",
 	grouId: "",

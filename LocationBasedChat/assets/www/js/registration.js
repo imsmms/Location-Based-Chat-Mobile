@@ -79,9 +79,9 @@ function getPhoneContactsSuccess(contacts){
 		//phoneContacts[i].contactName = contacts[i].displayName;
 		if(contacts[i].phoneNumbers){
 			for(var j=0;j<contacts[i].phoneNumbers.length;j++){
-				phoneContactsArray[phoneContactsArrayCount] = contacts[i].phoneNumbers[j].value;
+				phoneContactsArray[phoneContactsArrayCount] = contacts[i].phoneNumbers[j].value.replace(/\D/g,'');
 				//phoneContacts[i].contactPhones[j] = contacts[i].phoneNumbers[j].value;
-				namePhoneMapping[contacts[i].phoneNumbers[j].value] = contacts[i].displayName;
+				namePhoneMapping[contacts[i].phoneNumbers[j].value.replace(/\D/g,'')] = contacts[i].displayName;
 				phoneContactsArrayCount++;
 			}	
 		}

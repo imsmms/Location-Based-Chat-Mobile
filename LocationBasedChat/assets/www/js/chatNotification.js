@@ -1,3 +1,5 @@
+
+
 function registerNewSocket() {
 	navigator.notification.activityStart("", "loading Friends NearBy");
 	socket = io.connect(BASE_URL);
@@ -27,10 +29,19 @@ function registerNewSocket() {
 				namePhoneMapping[data.by] + ' has added you to a group. Do you want to join?',
 				function(btn) {
 					if(btn == 1) {
-						GroupChat[data.group] = new Group();
-						GroupChat[data.group].groupID = data.group;
-						GroupChat[data.group].groupName = data.groupName;
-						GroupChat[data.group].groupMembers = data.members;
+						alert("hello" + data.group);
+						GroupChats[data.group] = new Group();
+						alert("hello1");
+						GroupChats[data.group].groupID = data.group;
+						alert("hello2");
+						GroupChats[data.group].groupName = data.groupName;
+						alert("hello3");
+						GroupChats[data.group].groupMembers = data.members;
+						pageHistory.push("nearByContactsMap.html");
+						$("#pagePort").load("chat.html", function(){
+							$('#pagePort').trigger("create");
+						});
+						alert("hello4");
 					} else {
 						socket.emit('leave-group', { group: data.group });
 					}
