@@ -131,6 +131,10 @@ function createInfoWindowContent(name,id){
 
 function OpenChat(id){
 	if(groupChatFlag){
+		
+		/**analytics**/
+		ga('send', 'event', 'button', 'click', 'Group Chat button');
+		
 		chatID = group;
 		groupChatIDs[groupChatCounter] = id.split("_")[0];
 		var group = prompt("Please enter group name","");
@@ -150,6 +154,10 @@ function OpenChat(id){
 		}
 		chatHistoryIndex = group+"__";
 	}else{
+		
+		/**analytics**/
+		ga('send', 'event', 'button', 'click', 'Chat button');
+		
 		chatID = id;
 		if(!chatHistory[id+"__"]){
 			var chatItem = "<li><a onclick=\"openChatWindowFromHistory(this.id)\" id=\""+id+"__"+"\">"+namePhoneMapping[id]+"<\/a><\/li>";
@@ -159,10 +167,15 @@ function OpenChat(id){
 		chatHistoryIndex = id+"__";
 	}
 	
+	
 	//window.location = "chat.html";
 	pageHistory.push("nearByContactsMap.html");
 	$("#pagePort").load("chat.html", function(){
 		$('#pagePort').trigger("create");
+		ga('send', 'pageview', {
+			'page': 'chat.html',
+			'title': 'Chat'
+		});
 	});
 }
 
@@ -178,6 +191,10 @@ function openChatWindowFromHistory(id){
 }
 
 function addToGroup(id){
+	
+	/**analytics**/
+	ga('send', 'event', 'button', 'click', 'Add to Group button');
+	
 	if(groupChatIDs.indexOf(id.split("_")[0]) == -1){
 		groupChatIDs[groupChatCounter] = id.split("_")[0];
 		groupChatCounter++;
@@ -274,15 +291,26 @@ function addNewOnlineUserToMap(data){
 }
 
 function openMenu(){
+	
+	/**analytics**/
+	ga('send', 'event', 'button', 'click', 'Open legt menu button');
+	
 	$("#mypanel").panel("open");
 }
 
 function refreshNearBy(){
+	/**analytics**/
+	ga('send', 'event', 'button', 'click', 'Refresh near by button');
+	
 	$("#mypanel").panel("close");
 	getUserLocation();
 }
 
 function hideMyLocation(){
+	
+	/**analytics**/
+	ga('send', 'event', 'button', 'click', 'Hide my location button');
+	
 	var url = BASE_URL + "/hide/" + userId;
 	$.post(url,showHideSuccess).fail(function() {
 	    console.log( "error hiding" );
@@ -290,6 +318,10 @@ function hideMyLocation(){
 }
 
 function showMyLocation(){
+	
+	/**analytics**/
+	ga('send', 'event', 'button', 'click', 'Show my location button');
+	
 	var url = BASE_URL + "/show/" + userId;
 	$.post(url,showHideSuccess).fail(function() {
 	    console.log( "error showing" );
@@ -301,5 +333,8 @@ function showHideSuccess(data){
 }
 
 function openRightMenu(){
+	/**analytics**/
+	ga('send', 'event', 'button', 'click', 'Open right menu button');
+	
 	$("#myrightpanel").panel("open");
 }

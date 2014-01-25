@@ -22,6 +22,9 @@ function registerUser(){
 	userName = $("#userNameID").val();//"Ibrahim";
 	phoneNumber = $("#userPhoneNumber").val();//"01026357328";
 
+	/**analytics**/
+	ga('send', 'event', 'button', 'click', 'Register button');
+	
 	if(!validateRegisterationInfo(userName,phoneNumber)){
 		return;
 	}
@@ -92,6 +95,11 @@ function getPhoneContactsSuccess(contacts){
 		$("#pagePort").load("nearByContactsMap.html", function(){
 			$('#pagePort').css("background-image","none");
 			$('#pagePort').trigger("create");
+			/**analytics**/
+			ga('send', 'pageview', {
+				'page': 'nearByContactsMap.html',
+				'title': 'Friends finder map'
+			});
 		});
 		return;
 	}
@@ -162,6 +170,12 @@ function saveUserId(id){
 		$("#pagePort").load("nearByContactsMap.html", function(){
 			$('#pagePort').css("background-image","none");
 			$('#pagePort').trigger("create");
+			
+			/**analytics**/
+			ga('send', 'pageview', {
+				'page': 'nearByContactsMap.html',
+				'title': 'Friends finder map after registration'
+			});
 		});
 		return true;
 	}

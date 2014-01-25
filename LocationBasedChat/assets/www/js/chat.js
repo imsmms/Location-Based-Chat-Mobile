@@ -118,9 +118,15 @@ function displayChatBubbles(message,isSender,isHistory){
 	var appendedHTML = "";
 	if(isSender){
 		appendedHTML = "<p class=\"triangle-border right\">"+message+"<\/p>";
+		
+		/**analytics**/
+		ga('send', 'event', 'button', 'click', 'Send message button');
 		//alert(appendedHTML);
 	}else{
 		appendedHTML = "<p class=\"triangle-border left\">"+message+"<\/p>";
+		
+		/**analytics**/
+		ga('send', 'event', 'Recieve message', 'retrieve', 'Recieve message');
 	}
 	$("#chatarea").append(appendedHTML);
 	if(!isHistory){

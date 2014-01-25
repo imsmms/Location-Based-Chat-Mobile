@@ -34,8 +34,12 @@ function onDeviceReady() {
 	switch(envVariable){
 	case 1:
 		//For jasmine testing for now
-		
+
 		$("#pagePort").load("spec.html", function(){
+			ga('send', 'pageview', {
+				'page': 'spec.html',
+				'title': 'Testing, Not user'
+			});
 		});
 		//window.location = "spec.html";
 		break;
@@ -51,6 +55,10 @@ function onDeviceReady() {
 			$("#pagePort").load("registration.html", function(){
 				$('#pagePort').trigger("create");
 				initializeRegisteration();
+				ga('send', 'pageview', {
+					'page': 'registration.html',
+					'title': 'Registration'
+				});
 			});
 			//window.location = "registration.html";
 		}
@@ -68,7 +76,7 @@ function onDeviceReady() {
 			if(socket){
 				socket.disconnect();
 			}
-			
+
 			navigator.app.exitApp();
 			console.log("exitttt");
 		}else{
