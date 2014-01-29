@@ -34,6 +34,8 @@ function registerNewSocket() {
 						ChatGroups[data.group].groupName = data.groupName;
 						ChatGroups[data.group].groupMembers = data.members;
 						pageHistory.push("nearByContactsMap.html");
+						groupChatFlag = true;
+						chatID = data.group;
 						$("#pagePort").load("chat.html", function(){
 							$('#pagePort').trigger("create");
 						});

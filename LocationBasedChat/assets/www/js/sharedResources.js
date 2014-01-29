@@ -34,6 +34,8 @@ var groupChatIDs = [];
 var groupChatCounter = 0;
 var groupChatFlag = false;
 
+var groupName = "";
+
 //Notification Object
 var notifyMeObject = {
 		"near-by" : 0,

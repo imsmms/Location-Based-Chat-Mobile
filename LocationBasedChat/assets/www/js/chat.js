@@ -54,6 +54,11 @@ function Initialize(){
 	touchScroll('chatarea');
 	
 	socket.on('message', function(data) {
+		
+		console.log(JSON.stringify(data));
+		
+		console.log("________________________________________________");
+		console.log(chatID);
 		if(data['from'] == null || data['from'] == '')
 			return;
 
@@ -92,7 +97,13 @@ function recieveMessageSuccess(data){
 function sendMessage(message){
 	if(message == '')
 		return;
-	socket.emit('message', {to:chatID, txt:message});
+	
+	if(groupChatFlag){
+		socket.emit('message', {'group':chatID, 'txt':message});
+	}else{
+		socket.emit('message', {to:chatID, txt:message});
+	}
+	
 	appendMessageToLog(message, 0);
 	
 	/**
@@ -191,8 +202,16 @@ function InitGroupChat() {
 			ChatGroups[chatID].groupID = chatID;
 			ChatGroups[chatID].groupMembers = groupChatIDs;
 			ChatGroups[chatID].isAdmin = true;
+			ChatGroups[chatID].groupName = groupName;
+			groupChatEntryFunc();
 		});
+	}else{
+		groupChatEntryFunc();
 	}
+	
+}
+
+function groupChatEntryFunc(){
 	var members = ChatGroups[chatID] == null ? groupChatIDs : ChatGroups[chatID].groupMembers;
 	var friends = "";
 	for(var i=0;i<members.length;i++) {

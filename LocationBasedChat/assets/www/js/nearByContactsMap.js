@@ -135,7 +135,7 @@ function OpenChat(id){
 		/**analytics**/
 		ga('send', 'event', 'button', 'click', 'Group Chat button');
 		
-		chatID = group;
+		chatID = null;
 		groupChatIDs[groupChatCounter] = id.split("_")[0];
 		var group = prompt("Please enter group name","");
 		if(group == null){
@@ -147,6 +147,8 @@ function OpenChat(id){
 				return;
 			}
 		}
+		
+		groupName = group;
 		if(!chatHistory[group+"__"]){
 			var chatItem = "<li><a onclick=\"openChatWindowFromHistory(this.id)\" id=\""+group+"__"+"\">"+group+"<\/a><\/li>";
 			$("#rightlist").append(chatItem);
@@ -194,6 +196,7 @@ function addToGroup(id){
 	
 	/**analytics**/
 	ga('send', 'event', 'button', 'click', 'Add to Group button');
+	
 	
 	if(groupChatIDs.indexOf(id.split("_")[0]) == -1){
 		groupChatIDs[groupChatCounter] = id.split("_")[0];
