@@ -136,7 +136,9 @@ function OpenChat(id){
 		ga('send', 'event', 'button', 'click', 'Group Chat button');
 		
 		chatID = null;
-		groupChatIDs[groupChatCounter] = id.split("_")[0];
+		if(groupChatIDs.indexOf(id.split("_")[0]) == -1) {
+			groupChatIDs[groupChatCounter] = id.split("_")[0];
+		}
 		var group = prompt("Please enter group name","");
 		if(group == null){
 			return;

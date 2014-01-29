@@ -12,6 +12,8 @@ function registerNewSocket() {
 	
 	
 	socket.on('message', function(data) {
+		if(chatID != null && chatID != 0)
+			return;
 		if(data['from'] == null && data['from'] == '')
 			return;
 		window.plugins.statusBarNotification.notify(namePhoneMapping[data['from']] || data['from'] + " says:", data['txt'], 0);

@@ -61,8 +61,8 @@ function Initialize(){
 		console.log(chatID);
 		if(data['from'] == null || data['from'] == '')
 			return;
-
-		if (data['group'] && data['group'] == chatID) {
+		console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + (data['group'] && (data['group'] === chatID))+" <<<<<<<<<<<<<<<");
+		if (data['group'] && data['group'] === chatID) {
 			appendMessageToLog(data['txt'], data['from']);
 			var tmpMsg = (namePhoneMapping[data['from']] ? namePhoneMapping[data['from']] : data['from'])
 				+ ": " + data['txt'];
@@ -217,7 +217,7 @@ function groupChatEntryFunc(){
 	for(var i=0;i<members.length;i++) {
 		friends += namePhoneMapping[members[i]] + ',';
 	}
-	friends += userName;
+	friends += "You";
 	$("#friendName").html(ChatGroups[chatID] ? ChatGroups[chatID].groupName : "Group");
 	$("#friendStatus").html(friends);
 }
