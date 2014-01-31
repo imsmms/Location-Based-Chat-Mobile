@@ -41,16 +41,23 @@ function registerNewSocket() {
 				namePhoneMapping[data.by] + ' has added you to a group.',
 				function(btn) {
 					if(btn == 1) {
-						ChatGroups[data.group] = new Group();
-						ChatGroups[data.group].groupID = data.groupId;
-						ChatGroups[data.group].groupName = data.groupName;
-						ChatGroups[data.group].groupMembers = data.members;
+						ChatGroups[data.groupId] = new Group();
+						ChatGroups[data.groupId].groupID = data.groupId;
+						ChatGroups[data.groupId].groupName = data.groupName;
+						ChatGroups[data.groupId].groupMembers = data.members;
 						pageHistory.push("nearByContactsMap.html");
 						groupChatFlag = true;
-						chatID = data.group;
+						chatID = data.groupId;
+						
+						var chatItem = "<li><a onclick=\"openChatWindowFromHistory(this.id)\" id=\""+data.groupId+"__"+"\">"+data.groupName+"<\/a><\/li>";
+						$("#rightlist").append(chatItem);
+						chatHistory[data.groupId+"__"] = {"isGroup":true,"history":[]};
+						chatHistoryIndex = data.groupId+"__";
+						
 						$("#pagePort").load("chat.html", function(){
 							$('#pagePort').trigger("create");
 						});
+						console.log(JSON.stringify(data));
 					} else {
 						socket.emit('leave-group', { group: data.group });
 					}

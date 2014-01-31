@@ -155,10 +155,11 @@ function ShowGroupSelect() {
 	$('#contactList').empty();
 	for(var i = 0; i < nearByContacts.length; i++) {
 		console.log(JSON.stringify(nearByContacts));
-		if(ChatGroups[chatID] == null || !ChatGroups[chatID].members.contains([nearByContacts[i].number]))
+		if(ChatGroups[chatID] == null || ChatGroups[chatID].groupMembers.indexOf([nearByContacts[i].number]) != -1)
 			$('#contactList').append('<option value="' + nearByContacts[i].contactPhone + '">' + nearByContacts[i].contactName + '</option>');
 	}
-	$('#groupMembers').multiselect().show();
+	//$('#contactList').multiselect();
+	$('#groupMembers').show();
 	$('#btnManage').click(AddMembers);
 }
 
@@ -168,7 +169,8 @@ function ShowGroupMembers() {
 	for(var i = 0; i < members.length; i++) {
 		$('#contactList').append('<option value="' + members[i] + '">' + namePhoneMapping[members[i]] + '</option>');
 	}
-	$('#groupMembers').multiselect().show();
+	//$('#contactList').multiselect();
+	$('#groupMembers').show();
 	$('#btnManage').click(RemoveMembers);
 }
 
@@ -196,7 +198,7 @@ function InitGroupChat() {
 	if(chatID == null) {
 		socket.emit('create-group', {userId: userId, groupName: groupName},function(groupID){
 			chatID = groupID;
-			socket.emit('add-to-group',{group: chatID , members: groupChatIDs});
+			socket.emit('add-to-group',{groupId: chatID , members: groupChatIDs});
 			ChatGroups[chatID] = new Group();
 			ChatGroups[chatID].groupID = chatID;
 			ChatGroups[chatID].groupMembers = groupChatIDs;
@@ -209,10 +211,14 @@ function InitGroupChat() {
 	}
 }
 
-function groupChatEntryFunc(){
-	if(chatID == null || ChatGroups[chatID].isAdmin) {
-		$('#groupMembers').show();
-	} else { $('#groupMembers').hide();
+function groupChatEntryFunc() {
+	if(chatID == null) {
+		$('#groupChat').show();
+	} else if (ChatGroups[chatID] && ChatGroups[chatID].isAdmin) {
+		$('#groupChat').show();
+	} else {
+		$('#groupChat').hide();
+	}
 	var members = ChatGroups[chatID] == null ? groupChatIDs : ChatGroups[chatID].groupMembers;
 	var friends = "";
 	for(var i=0;i<members.length;i++) {

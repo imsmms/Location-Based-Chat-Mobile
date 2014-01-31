@@ -63,7 +63,7 @@ var GroupChats = [];
 
 function Group() {
 	this.groupName = "";
-	this.grouId = "";
+	this.groupID = "";
 	this.groupMembers = [];
 	this.isAdmin = false;
 }
