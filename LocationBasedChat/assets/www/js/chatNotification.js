@@ -2,6 +2,10 @@
 
 function registerNewSocket() {
 	navigator.notification.activityStart("", "loading Friends NearBy");
+	if(socket) {
+		getUserLocation();
+		return;
+	}
 	socket = io.connect(BASE_URL);
 	
 	socket.on('connect',function(data){
@@ -16,8 +20,14 @@ function registerNewSocket() {
 			return;
 		if(data['from'] == null && data['from'] == '')
 			return;
-		window.plugins.statusBarNotification.notify(namePhoneMapping[data['from']] || data['from'] + " says:", data['txt'], 0);
-		//navigator.notification.alert(data['txt'], null, data['from'] + " says:", "Ok");
+		newChatID = data['groupID'] || data['from'];
+		window.plugins.statusBarNotification.notify(namePhoneMapping[data['from']] + " says:", data['txt'], 0, switchChat);
+		if(!chatHistory[newChatID+"__"]){
+			var chatItem = "<li><a onclick=\"openChatWindowFromHistory(this.id)\" id=\""+newChatID+"__"+"\">"+namePhoneMapping[newChatID]+"<\/a><\/li>";
+			$("#rightlist").append(chatItem);
+			chatHistory[newChatID+"__"] = {"isGroup":data['groupID'] != null,"history":[]};
+		}
+		chatHistory[newChatID+"__"].history.push({"isSender" : false,"message" : data['txt']})
 	});
 	socket.on('notification', function(data) {
 		console.log("Notification!!!");
@@ -28,11 +38,11 @@ function registerNewSocket() {
 			break;
 		case 1:
 			navigator.notification.confirm(
-				namePhoneMapping[data.by] + ' has added you to a group. Do you want to join?',
+				namePhoneMapping[data.by] + ' has added you to a group.',
 				function(btn) {
 					if(btn == 1) {
 						ChatGroups[data.group] = new Group();
-						ChatGroups[data.group].groupID = data.group;
+						ChatGroups[data.group].groupID = data.groupId;
 						ChatGroups[data.group].groupName = data.groupName;
 						ChatGroups[data.group].groupMembers = data.members;
 						pageHistory.push("nearByContactsMap.html");
@@ -46,7 +56,7 @@ function registerNewSocket() {
 					}
 				},
 				'Group Invite',
-				'Join,Leave'
+				'OK,Leave'
 			);
 			break;
 		case 2:
@@ -73,4 +83,8 @@ function registerNewSocket() {
 			break;
 		}
 	});
+}
+
+function switchChat() {
+	OpenChat(newChatID);
 }

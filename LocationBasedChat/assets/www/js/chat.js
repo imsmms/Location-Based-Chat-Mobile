@@ -61,7 +61,6 @@ function Initialize(){
 		console.log(chatID);
 		if(data['from'] == null || data['from'] == '')
 			return;
-		console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + (data['group'] && (data['group'] === chatID))+" <<<<<<<<<<<<<<<");
 		if (data['group'] && data['group'] === chatID) {
 			appendMessageToLog(data['txt'], data['from']);
 			var tmpMsg = (namePhoneMapping[data['from']] ? namePhoneMapping[data['from']] : data['from'])
@@ -195,7 +194,7 @@ function CancelAction() {
 
 function InitGroupChat() {
 	if(chatID == null) {
-		socket.emit('create-group', {id: userId},function(groupID){
+		socket.emit('create-group', {userId: userId, groupName: groupName},function(groupID){
 			chatID = groupID;
 			socket.emit('add-to-group',{group: chatID , members: groupChatIDs});
 			ChatGroups[chatID] = new Group();
@@ -208,10 +207,12 @@ function InitGroupChat() {
 	}else{
 		groupChatEntryFunc();
 	}
-	
 }
 
 function groupChatEntryFunc(){
+	if(chatID == null || ChatGroups[chatID].isAdmin) {
+		$('#groupMembers').show();
+	} else { $('#groupMembers').hide();
 	var members = ChatGroups[chatID] == null ? groupChatIDs : ChatGroups[chatID].groupMembers;
 	var friends = "";
 	for(var i=0;i<members.length;i++) {
@@ -220,10 +221,6 @@ function groupChatEntryFunc(){
 	friends += "You";
 	$("#friendName").html(ChatGroups[chatID] ? ChatGroups[chatID].groupName : "Group");
 	$("#friendStatus").html(friends);
-}
-
-function switchChat() {
-	openChat(newChatID);
 }
 
 function LeaveGroup() {
