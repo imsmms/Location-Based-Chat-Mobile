@@ -83,9 +83,14 @@ function registerNewSocket() {
 			break;
 		case 5:
 			navigator.notification.alert("You have been removed from a group", null, "Remove Notification", "OK");
-			if(chatID == data.group)
-				$('#pagePort').load('nearbycontactsmap.html', function() { });
-			ChatGroups[data.group] = null;
+			if(chatID == data.group) {
+				ChatGroups[data.group] = null;
+				$("#pagePort").load(pageHistory.pop(), function(){
+					$('#pagePort').trigger("create");
+					chatID = 0;
+					groupChatFlag = false;
+				});
+			}
 			break;
 		default:
 			break;
