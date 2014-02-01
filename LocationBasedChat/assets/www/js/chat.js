@@ -149,9 +149,9 @@ function sendMessageUI(){
 
 function ShowGroupSelect() {
 	$('#contactList').empty().val('');
-	console.log(nearByContacts);
+	console.log(JSON.stringify(nearByContacts));
 	for(var i = 0; i < nearByContacts.length; i++) {
-		if(ChatGroups[chatID].groupMembers.indexOf([nearByContacts[i].number]) != -1)
+		if(ChatGroups[chatID].groupMembers.indexOf([nearByContacts[i].contactPhone]) == -1)
 			$('#contactList').append('<option value="' + nearByContacts[i].contactPhone + '">' + nearByContacts[i].contactName + '</option>');
 	}
 	//$('#contactList').multiselect();
@@ -172,9 +172,9 @@ function ShowGroupMembers() {
 
 function AddMembers() {
 	var members = $('#contactList').val();
-	socket.emit('add-to-group', { group: chatID, members: members });
-	foreach(member in members)
-		ChatGroups[chatID].groupMembers.push(member);
+	socket.emit('add-to-group', { groupId: chatID, members: members });
+	for(var i = 0; i < members.length; i++)
+		ChatGroups[chatID].groupMembers.push(members[i]);
 	InitGroupChat();
 	CancelAction();
 }
@@ -185,7 +185,6 @@ function RemoveMembers() {
 	console.log(members);
 	socket.emit('remove-from-group', { group: chatID, members: members });
 	for(var i = 0; i < members.length; i++) {
-		console.log(members[i]);
 		var index = ChatGroups[chatID].groupMembers.indexOf(members[i]);
 		ChatGroups[chatID].groupMembers.splice(index, 1);
 	}

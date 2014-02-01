@@ -59,7 +59,7 @@ function registerNewSocket() {
 						});
 						console.log(JSON.stringify(data));
 					} else {
-						socket.emit('leave-group', { group: data.group });
+						socket.emit('leave-group', { group: data.groupId });
 					}
 				},
 				'Group Invite',
