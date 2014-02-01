@@ -148,29 +148,31 @@ function sendMessageUI(){
 }
 
 function ShowGroupSelect() {
-	$('#contactList').empty().val('');
+	$('#contactList option').remove();
 	console.log(JSON.stringify(nearByContacts));
 	for(var i = 0; i < nearByContacts.length; i++) {
 		if(ChatGroups[chatID].groupMembers.indexOf([nearByContacts[i].contactPhone]) == -1)
 			$('#contactList').append('<option value="' + nearByContacts[i].contactPhone + '">' + nearByContacts[i].contactName + '</option>');
 	}
-	//$('#contactList').multiselect();
 	$('#groupMembers').show();
-	$('#btnManage').click(AddMembers);
+	$('#btnManage').attr('m', "add");
 }
 
 function ShowGroupMembers() {
-	$('#contactList').empty().val('');
+	$('#contactList option').remove();
 	var members = ChatGroups[chatID].groupMembers;
 	for(var i = 0; i < members.length; i++) {
 		$('#contactList').append('<option value="' + members[i] + '">' + namePhoneMapping[members[i]] + '</option>');
 	}
-	//$('#contactList').multiselect();
 	$('#groupMembers').show();
-	$('#btnManage').click(RemoveMembers);
+	$('#btnManage').attr('m', "remove");
 }
 
 function AddMembers() {
+	if($('#btnManage').attr('m') == "remove") {
+		RemoveMembers();
+		return;
+	}
 	var members = $('#contactList').val();
 	socket.emit('add-to-group', { groupId: chatID, members: members });
 	for(var i = 0; i < members.length; i++)
