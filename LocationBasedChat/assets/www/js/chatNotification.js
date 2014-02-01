@@ -48,7 +48,7 @@ function registerNewSocket() {
 						pageHistory.push("nearByContactsMap.html");
 						groupChatFlag = true;
 						chatID = data.groupId;
-						
+
 						var chatItem = "<li><a onclick=\"openChatWindowFromHistory(this.id)\" id=\""+data.groupId+"__"+"\">"+data.groupName+"<\/a><\/li>";
 						$("#rightlist").append(chatItem);
 						chatHistory[data.groupId+"__"] = {"isGroup":true,"history":[]};
@@ -67,9 +67,10 @@ function registerNewSocket() {
 			);
 			break;
 		case 2:
-			ChatGroups[data.group] = null;
-			if(data.group == chatID)
-				$('#pagePort').load('nearbycontactsmap.html', function() {});
+			var index = ChatGroups[data.group].groupMembers.indexOf(data.member);
+			ChatGroups[data.group].groupMembers.splice(index, 1);
+			if(chatID == data.group)
+				InitGroupChat();
 			break;
 		case 3:
 				if(ChatGroups[data.group])

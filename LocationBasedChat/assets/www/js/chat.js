@@ -32,10 +32,6 @@ function Initialize(){
 	
 	if(groupChatFlag) {
 		InitGroupChat();
-		$('#leaveGroup').show();
-		if(chatID === null || ChatGroups[chatID].isAdmin) {
-			$('#manageGroup').show();
-		}
 	} else {
 		if(namePhoneMapping[chatID]){
 			$("#friendName").html(namePhoneMapping[chatID]);
@@ -212,12 +208,13 @@ function InitGroupChat() {
 }
 
 function groupChatEntryFunc() {
+	$('#groupChat').show();
 	if(chatID == null) {
-		$('#groupChat').show();
+		$('#manageGroup').show();
 	} else if (ChatGroups[chatID] && ChatGroups[chatID].isAdmin) {
-		$('#groupChat').show();
+		$('#manageGroup').show();
 	} else {
-		$('#groupChat').hide();
+		$('#manageGroup').hide();
 	}
 	var members = ChatGroups[chatID] == null ? groupChatIDs : ChatGroups[chatID].groupMembers;
 	var friends = "";
@@ -232,8 +229,11 @@ function groupChatEntryFunc() {
 function LeaveGroup() {
 	socket.emit('leave-group', { group: chatID });
 	GroupChats[chatID] = null;
-	chatID = null;
-	$('#pagePort').load('nearbycontactsmap.html', function() {});
+	$("#pagePort").load(pageHistory.pop(), function(){
+		$('#pagePort').trigger("create");
+		chatID = 0;
+		groupChatFlag = false;
+	});
 }
 
 window.onresize = function(){

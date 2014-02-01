@@ -40,7 +40,7 @@ var groupName = "";
 var notifyMeObject = {
 		"near-by" : 0,
 		"add-to-group" : 1,
-		"remove-member" : 2,
+		"leave-group" : 2,
 		"new-member": 3,
 		"remove-member": 4,
 		"remove-from-group": 5
