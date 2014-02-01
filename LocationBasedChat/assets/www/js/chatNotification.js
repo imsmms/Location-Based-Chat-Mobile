@@ -86,6 +86,14 @@ function registerNewSocket() {
 				$('#pagePort').load('nearbycontactsmap.html', function() { });
 			ChatGroups[data.group] = null;
 			break;
+		case 6:
+			console.log("Online Notification!!!");
+			addNewOnlineUserToMap(data);
+			break;
+		case 7:
+			console.log("Offline Notification!!!");
+			removeUserFromMap(data);
+			break;
 		default:
 			break;
 		}

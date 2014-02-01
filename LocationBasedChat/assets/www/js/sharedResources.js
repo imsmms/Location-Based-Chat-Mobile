@@ -17,6 +17,8 @@ var namePhoneMapping = {};
 var isnearBy = false;
 var chatID;
 var newChatID;
+
+var onlineUsers = [];
 //Stubbed user ID
 var userId;
 var ChatGroups = { };
@@ -47,7 +49,9 @@ var notifyMeObject = {
 		"remove-member" : 2,
 		"new-member": 3,
 		"remove-member": 4,
-		"remove-from-group": 5
+		"remove-from-group": 5,
+		"on-line" : 6,
+		"off-line" : 7
 }
 
 /**

@@ -7,12 +7,14 @@
 /**
  * initializeNearBy
  */
+
 function initializeNearBy(){
-	$("#chatHeader").height(windowHight/7);
+	//var headerHeight = (windowHight * 10)/100;
+	$("#chatHeader").height("100px");
+	headerHeight = parseInt($("#chatHeader").height());
 	//$("#moredots").height(windowHight/7);
 	$("#chatHeader").css("background-size","100% 100%");
-	$("#geoLocation").css("top",(windowHight/7)+"px");
-	$("#moredots").css("top",((windowHight/14)-15)+"px");
+	$("#geoLocation").css("top","100px");
 	isInNearBy = true;
 }
 
@@ -45,7 +47,7 @@ function getUserLocationSuccess(position){
 	
 	locObj = {position : myLocation,name : "my location"};
 
-	createMarker(locObj,"../img/orangepin.png");
+	createMarker(locObj,"img/orangepin.png");
 	//getContactslocally();
 	getNearByContacts(myLocation);
 }
@@ -90,6 +92,7 @@ function createMarker(markerObj,pinImg){
 		map: map,
 		position: markerObj.position,
 		title:markerObj.position.d + ", " + markerObj.position.e,
+		animation: google.maps.Animation.DROP,
 		icon: pinImg
 	}); 
 	//var infowindow;
@@ -165,8 +168,8 @@ function OpenChat(id){
 		
 		groupName = group;
 		if(!chatHistory[group+"__"]){
-			var chatItem = "<li><a onclick=\"openChatWindowFromHistory(this.id)\" id=\""+group+"__"+"\">"+group+"<\/a><\/li>";
-			$("#rightlist").append(chatItem);
+			//var chatItem = "<li><a onclick=\"openChatWindowFromHistory(this.id)\" id=\""+group+"__"+"\">"+group+"<\/a><\/li>";
+			//$("#chatHistory").append(chatItem);
 			chatHistory[group+"__"] = {"isGroup":true,"history":[]};
 		}
 		chatHistoryIndex = group+"__";
@@ -177,8 +180,8 @@ function OpenChat(id){
 		
 		chatID = id;
 		if(!chatHistory[id+"__"]){
-			var chatItem = "<li><a onclick=\"openChatWindowFromHistory(this.id)\" id=\""+id+"__"+"\">"+namePhoneMapping[id]+"<\/a><\/li>";
-			$("#chatHistory").append(chatItem);
+			//var chatItem = "<li><a onclick=\"openChatWindowFromHistory(this.id)\" id=\""+id+"__"+"\">"+namePhoneMapping[id]+"<\/a><\/li>";
+			//$("#chatHistory").append(chatItem);
 			chatHistory[id+"__"] = {"isGroup":false,"history":[]};
 		}
 		chatHistoryIndex = id+"__";
@@ -261,7 +264,9 @@ function getNearByContactsSuccess(data){
 		var lng = data.contacts[i].loc.coordinates[0];
 		var contactLoc = new google.maps.LatLng(lat, lng);
 		contactObj.position = contactLoc;
-		createMarker(contactObj,"../img/greenpin.png");
+		createMarker(contactObj,"img/greenpin.png");
+		
+		onlineUsers.push(data.contacts[i].number);
 	}
 	navigator.notification.activityStop();
 	fillNearByContacts(data);
@@ -271,7 +276,7 @@ function getNearByContactsSuccess(data){
 	contactObj.number = "01067310900";
 	var contactLoc = new google.maps.LatLng(30.02422, 31.21413);
 	contactObj.position = contactLoc;
-	createMarker(contactObj,"../img/greenpin.png");*/
+	createMarker(contactObj,"img/greenpin.png");
 }
 
 function fillNearByContacts(data){
@@ -306,6 +311,15 @@ function addNewOnlineUserToMap(data){
 	contactObj.position = contactLoc;
 	createMarker(contactObj,"../img/greenpin.png");
 	fillNearByContacts(data);
+}
+
+function removeUserFromMap(data){
+	var index = onlineUsers.indexOf(data.contact);
+	if (index > -1) {
+		onlineUsers.splice(index, 1);
+		markersArray[index].setMap(null);
+		markersArray.splice(index, 1);
+	}
 }
 
 function openMenu(){
@@ -360,6 +374,8 @@ function openRightMenu(){
 function openNearBy(){
 	if(!isInNearBy){
 		$("#pagePort").load("nearByContactsMap.html", function(){
+			isInNearBy = true;
+			isInChatList = false;
 			$('#pagePort').css("background-image","none");
 			$('#pagePort').trigger("create");
 			
@@ -374,6 +390,47 @@ function openNearBy(){
 
 function openChatList(){
 	if(!isInChatList){
-		
+		renderChatList();
+		$("#pagePort").load("chatlist.html", function(){
+			isInNearBy = false;
+			isInChatList = true;
+			$("#chatlistcontainer").height((windowHight - 100) + "px");
+			$('#chatlistcontainer').css("background-image","url('img/registrationChat.png')");
+			$('#chatlistcontainer').css("background-repeat","no-repeat");
+			$('#chatlistcontainer').css("background-size","100% 100%");
+			
+			
+			$("#chatList").html($("#chatHistory").html());
+			$('#pagePort').trigger("create");
+			/**analytics**/
+			ga('send', 'pageview', {
+				'page': 'chatlist.html',
+				'title': 'Friends finder map after registration'
+			});
+		});
+	}
+}
+
+function addChatListItem(chathistoryid,name,lastchat){
+	var strVar="";
+	strVar += "<li onclick=\"openChatWindowFromHistory(this.id)\" id=\""+chathistoryid+"\">";
+	strVar += "	<img alt=\"\" src=\"img\/user.png\">";
+	strVar += "	<h3>"+name+"<\/h3>";
+	strVar += "	<p>"+lastchat+"<\/p>";
+	strVar += "<\/li>";
+}
+
+function renderChatList(){
+	for(var chathistoryid in chatHistory){
+		var listitemid = chathistoryid.split("_")[0];
+		var name = "";
+		if(chatHistory[chathistoryid].isGroup){
+			name = listitemid;
+		}else{
+			name = namePhoneMapping[listitemid];
+		}
+		//var chatItem = "<li><a onclick=\"openChatWindowFromHistory(this.id)\" id=\""+chathistoryid+"\">"+name+"<\/a><\/li>";
+		var chatItem = addChatListItem(chathistoryid,name,chatHistory[chathistoryid].history[chatHistory[chathistoryid].history.length - 1]);
+		$("#chatHistory").append(chatItem);
 	}
 }

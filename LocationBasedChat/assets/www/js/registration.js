@@ -100,8 +100,9 @@ function getPhoneContactsSuccess(contacts){
 				'page': 'nearByContactsMap.html',
 				'title': 'Friends finder map'
 			});
-			initializeNearBy();
 			registerNewSocket();
+			initializeNearBy();
+			
 		});
 		return;
 	}
@@ -178,8 +179,9 @@ function saveUserId(id){
 				'page': 'nearByContactsMap.html',
 				'title': 'Friends finder map after registration'
 			});
-			initializeNearBy();
 			registerNewSocket();
+			initializeNearBy();
+			
 		});
 		return true;
 	}

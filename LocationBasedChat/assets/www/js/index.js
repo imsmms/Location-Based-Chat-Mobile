@@ -84,6 +84,8 @@ function onDeviceReady() {
 				$('#pagePort').trigger("create");
 				chatID = 0;
 				groupChatFlag = false;
+				registerNewSocket();
+				initializeNearBy();
 			});
 			console.log("back");
 		}
