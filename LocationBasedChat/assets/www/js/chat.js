@@ -11,6 +11,8 @@ function Initialize(){
 	
 	console.log("Hello chat");
 	
+	isInNearBy = false;
+	
 	$(document).keydown(function(e) {
 		if(e.which == 13) {
 			sendMessageUI();

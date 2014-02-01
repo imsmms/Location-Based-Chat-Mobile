@@ -9,7 +9,7 @@ function initializeRegisteration(){
 	$("#wrap").css("top",top);
 	console.log($('body').height()+" : "+$('body').width());
 	$('#pagePort').height(parseInt(window.innerHeight));
-	$('#pagePort').css("background-image","url('img/map.jpg')");
+	$('#pagePort').css("background-image","url('img/registrationChat.png')");
 	$('#pagePort').css("background-repeat","no-repeat");
 	$('#pagePort').css("background-size","100% 100%");
 	console.log($('#pagePort').height()+" : "+$('#pagePort').width());
@@ -100,6 +100,8 @@ function getPhoneContactsSuccess(contacts){
 				'page': 'nearByContactsMap.html',
 				'title': 'Friends finder map'
 			});
+			initializeNearBy();
+			registerNewSocket();
 		});
 		return;
 	}
@@ -176,6 +178,8 @@ function saveUserId(id){
 				'page': 'nearByContactsMap.html',
 				'title': 'Friends finder map after registration'
 			});
+			initializeNearBy();
+			registerNewSocket();
 		});
 		return true;
 	}
