@@ -5,6 +5,19 @@
 
 
 /**
+ * initializeNearBy
+ */
+function initializeNearBy(){
+	$("#chatHeader").height(windowHight/7);
+	//$("#moredots").height(windowHight/7);
+	$("#chatHeader").css("background-size","100% 100%");
+	$("#geoLocation").css("top",(windowHight/7)+"px");
+	$("#moredots").css("top",((windowHight/14)-15)+"px");
+	isInNearBy = true;
+}
+
+
+/**
  * getUserLocation is the function responsible for getting user location
  */
 function getUserLocation(){
@@ -32,7 +45,7 @@ function getUserLocationSuccess(position){
 	
 	locObj = {position : myLocation,name : "my location"};
 
-	createMarker(locObj,"FE7569");
+	createMarker(locObj,"../img/orangepin.png");
 	//getContactslocally();
 	getNearByContacts(myLocation);
 }
@@ -65,19 +78,19 @@ function getCurrentPositionNearByNativeSuccess(location){
  * @param markerObj
  * @param pinColor
  */
-function createMarker(markerObj,pinColor){
+function createMarker(markerObj,pinImg){
 	
 	//var pinColor = "FE7569";
-    var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pinColor,
+    /*var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pinColor,
         new google.maps.Size(21, 34),
         new google.maps.Point(0,0),
-        new google.maps.Point(10, 34));
+        new google.maps.Point(10, 34));*/
 	
 	var marker = new google.maps.Marker({
 		map: map,
 		position: markerObj.position,
 		title:markerObj.position.d + ", " + markerObj.position.e,
-		icon: pinImage
+		icon: pinImg
 	}); 
 	//var infowindow;
 	if(markerObj.name == "my location"){
@@ -112,7 +125,7 @@ function createInfoWindowContent(name,id){
 	if(groupChatFlag){
 		chatbutton = "Open Group Chat";
 	}
-	var infoWindow="<div style=\"width:320px; height:140px;\">";
+	var infoWindow="<div style=\"width:320px; height:150px;\">";
 	infoWindow += "	<div style=\"width: 100%; position: absolute; top: 0px; height: 80px;\">";
 	infoWindow += "<img alt=\"\" src=\"img\/user.png\"";
 	infoWindow += "	style=\"width: 40px; height: 40px; position: absolute; top: 10px; left: 10px;\">";
@@ -122,7 +135,7 @@ function createInfoWindowContent(name,id){
 	infoWindow += "	id=\"friendStatus\">friend status<\/div>";
 	infoWindow += "	<button style=\"position: absolute; top: 60px; left: 8px; right: 8px;\"";
 	infoWindow += "	onclick=\"addToGroup(this.id)\" id=\""+id+"_"+"\">Add to group<\/button>";
-	infoWindow += "	<div style='height : 10px'><\/div><button style=\"position: absolute; top: 85px; left: 8px; right: 8px;\"";
+	infoWindow += "	<button style=\"position: absolute; top: 95px; left: 8px; right: 8px;\"";
 	infoWindow += "	onclick=\"OpenChat(this.id)\" id=\""+id+"\">"+chatbutton+"<\/button>";
 	infoWindow += "	<\/div><\/div>";
 	return infoWindow;
@@ -165,7 +178,7 @@ function OpenChat(id){
 		chatID = id;
 		if(!chatHistory[id+"__"]){
 			var chatItem = "<li><a onclick=\"openChatWindowFromHistory(this.id)\" id=\""+id+"__"+"\">"+namePhoneMapping[id]+"<\/a><\/li>";
-			$("#rightlist").append(chatItem);
+			$("#chatHistory").append(chatItem);
 			chatHistory[id+"__"] = {"isGroup":false,"history":[]};
 		}
 		chatHistoryIndex = id+"__";
@@ -248,7 +261,7 @@ function getNearByContactsSuccess(data){
 		var lng = data.contacts[i].loc.coordinates[0];
 		var contactLoc = new google.maps.LatLng(lat, lng);
 		contactObj.position = contactLoc;
-		createMarker(contactObj,"67F097");
+		createMarker(contactObj,"../img/greenpin.png");
 	}
 	navigator.notification.activityStop();
 	fillNearByContacts(data);
@@ -258,7 +271,7 @@ function getNearByContactsSuccess(data){
 	contactObj.number = "01067310900";
 	var contactLoc = new google.maps.LatLng(30.02422, 31.21413);
 	contactObj.position = contactLoc;
-	createMarker(contactObj,"67F097");*/
+	createMarker(contactObj,"../img/greenpin.png");*/
 }
 
 function fillNearByContacts(data){
@@ -291,7 +304,7 @@ function addNewOnlineUserToMap(data){
 	var lng = parseFloat(data.loc[0]);
 	var contactLoc = new google.maps.LatLng(lat, lng);
 	contactObj.position = contactLoc;
-	createMarker(contactObj,"67F097");
+	createMarker(contactObj,"../img/greenpin.png");
 	fillNearByContacts(data);
 }
 
@@ -342,4 +355,25 @@ function openRightMenu(){
 	ga('send', 'event', 'button', 'click', 'Open right menu button');
 	
 	$("#myrightpanel").panel("open");
+}
+
+function openNearBy(){
+	if(!isInNearBy){
+		$("#pagePort").load("nearByContactsMap.html", function(){
+			$('#pagePort').css("background-image","none");
+			$('#pagePort').trigger("create");
+			
+			/**analytics**/
+			ga('send', 'pageview', {
+				'page': 'nearByContactsMap.html',
+				'title': 'Friends finder map after registration'
+			});
+		});
+	}
+}
+
+function openChatList(){
+	if(!isInChatList){
+		
+	}
 }

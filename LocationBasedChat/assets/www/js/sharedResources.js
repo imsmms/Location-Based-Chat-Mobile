@@ -22,6 +22,11 @@ var userId;
 var ChatGroups = { };
 var socket;
 
+
+var windowHight = parseInt($(window).height());
+var isInNearBy = false;
+var isInChatList = false;
+
 //Back button handling
 var pageHistory = [];
 //Markers

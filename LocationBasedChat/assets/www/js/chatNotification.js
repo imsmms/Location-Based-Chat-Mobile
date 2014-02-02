@@ -1,5 +1,3 @@
-
-
 function registerNewSocket() {
 	navigator.notification.activityStart("", "loading Friends NearBy");
 	if(socket) {
@@ -73,11 +71,14 @@ function registerNewSocket() {
 				InitGroupChat();
 			break;
 		case 3:
-				if(ChatGroups[data.group])
+				if(ChatGroups[data.group]) {
 					ChatGroups[data.group].groupMembers.push(data.member);
+					InitGroupChat();
+				}
 			break;
 		case 4:
-			ChatGroups[data.group].groupMembers.remove(data.member);
+			var index = ChatGroups[data.group].groupMembers.indexOf(data.member);
+			ChatGroups[data.group].groupMembers.splice(index, 1);
 			if(chatID == data.group)
 				InitGroupChat();
 			break;

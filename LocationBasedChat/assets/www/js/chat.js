@@ -10,6 +10,7 @@ var isKeyBoardDisappears = false;
 function Initialize(){
 	
 	console.log("Hello chat");
+	isInNearBy = false;
 	
 	$(document).keydown(function(e) {
 		if(e.which == 13) {
@@ -182,7 +183,6 @@ function AddMembers() {
 }
 
 function RemoveMembers() {
-	console.log("remove member");
 	var members = $('#contactList').val();
 	console.log(members);
 	socket.emit('remove-from-group', { group: chatID, members: members });
