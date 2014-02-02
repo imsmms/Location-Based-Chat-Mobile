@@ -93,6 +93,16 @@ function registerNewSocket() {
 				});
 			}
 			break;
+		case 6:
+			console.log("Online Notification!!!");
+			addNewOnlineUserToMap(data);
+			break;
+		case 7:
+			console.log("Offline Notification!!!");
+			console.log(JSON.stringify(data));
+			removeUserFromMap(data);
+			
+			break;
 		default:
 			break;
 		}

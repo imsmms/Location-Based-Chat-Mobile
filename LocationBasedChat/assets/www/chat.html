@@ -1,42 +1,31 @@
 <!DOCTYPE html>
-<style>select { height: 90%; } option { height: 30px }</style>
+
 <script type="text/javascript">
 	$.mobile.loadingMessage = false;
 	$(document).ready(function() {
 		Initialize();
 	});
 </script>
-<div id="groupMembers" style="width: 90%;margin: 65px auto;z-index=1000;display:none">
-	<select multiple id="contactList" style="width: 100%"></select><br />
-	<input type="button" id="btnManage" value="Submit" m="" style="width:49%;margin:0;" onclick="AddMembers()" />
-	<input type="button" value="Cancel" style="width:49%;margin:0" onclick="CancelAction()" />
-</div>
 <div
-	style="width: 100%; position: absolute; background-color: #414141; top: 0px; height: 60px; left: 0px;">
+	id="chatheader" style="width: 100%; position: fixed; background-color: #414141; top: 0px; height: 100px; left: 0px; z-index: 10;">
 	<img alt="" src="img/user.png"
-		style="width: 40px; height: 40px; position: absolute; top: 10px; left: 10px;">
+		style="width: 60px; height: 60px; position: fixed; top: 10px; left: 10px;">
 	<div
-		style="position: absolute; left: 60px; top: 10px; color: white; font-size: 15px;"
+		style="position: fixed; left: 80px; top: 10px; color: white; font-size: 15px;"
 		id="friendName">friend name</div>
 	<div
-		style="position: absolute; left: 60px; top: 30px; color: white; font-size: 10px;"
+		style="position: fixed; left: 80px; top: 30px; color: white; font-size: 10px;"
 		id="friendStatus">online</div>
-	<div id="groupChat" style="float:right;display:none">
-		<input id="leaveGroup" type="button" value="X" onclick="LeaveGroup()" />
-		<div id="manageGroup" style="display:none">
-			<input id="addMembers" type="button" value="+" onclick="ShowGroupSelect()" />
-			<input id="removeMembers" type="button" value="-" onclick="ShowGroupMembers()" />
-		</div>
-	</div>
 </div>
 <div id="chatarea"
-	style="width: 100%; position: absolute; bottom: 50px; overflow-y: scroll;"></div>
-<div
-	style="width: 100%; position: absolute; bottom: 0; background-color: gray; left: 0px;">
+	style="width: 100%; position: absolute; bottom: 80px; overflow-y: scroll; background-color: transparent;"></div>
+<div data-role="footer" style="background-color: gray;"
+	data-position="fixed">
 	<input id="chatinput" type="text" data-role="none"
-		style="width: 90%; font-size: 15px !important; height: 40px;" onfocus="keyBoardAppears()" onblur="keyBoardDisappears()"/>
-	<img alt="" src="img/ic_action_send.png" id="chatImgID" data-role="none"
-		style="width: 9%; height: 100%; position: absolute; right: 0px; bottom: 0px;"
-		onclick="sendMessageUI()">
-		
+		style="width: 90%; font-size: 20px !important; height: 80px; float: left;" />
+	<!-- onfocus="keyBoardAppears()" onblur="keyBoardDisappears()" -->
+	<span id="chatImgID"
+		style="width: 9%; height: 80px; float: right; background-image: url('img/ic_action_send.png'); background-size: 100% 100%;"
+		onclick="sendMessageUI()"></span>
+
 </div>

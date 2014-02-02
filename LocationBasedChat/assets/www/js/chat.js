@@ -30,7 +30,7 @@ function Initialize(){
 		socket = io.connect(BASE_URL);
 	}
 	//socket.emit('register', {id: userId}, function() { return; });
-	
+	$("#chatheader").attr("onclick","");
 	if(groupChatFlag) {
 		InitGroupChat();
 	} else {
@@ -216,7 +216,7 @@ function InitGroupChat() {
 }
 
 function groupChatEntryFunc() {
-	$('#groupChat').show();
+	$("#chatheader").attr("onclick","openGroupInfo()");
 	if(chatID == null) {
 		$('#manageGroup').show();
 	} else if (ChatGroups[chatID] && ChatGroups[chatID].isAdmin) {
@@ -236,11 +236,20 @@ function groupChatEntryFunc() {
 
 function LeaveGroup() {
 	socket.emit('leave-group', { group: chatID });
-	GroupChats[chatID] = null;
-	$("#pagePort").load(pageHistory.pop(), function(){
+	chatID = null;
+	$("#pagePort").load("nearByContactsMap.html", function(){
+		isInNearBy = true;
+		isInChatList = false;
+		$('#pagePort').css("background-image","none");
 		$('#pagePort').trigger("create");
-		chatID = 0;
-		groupChatFlag = false;
+		initializeNearBy();
+		getUserLocation();
+		
+		/**analytics**/
+		ga('send', 'pageview', {
+			'page': 'nearByContactsMap.html',
+			'title': 'Friends finder map after registration'
+		});
 	});
 }
 
