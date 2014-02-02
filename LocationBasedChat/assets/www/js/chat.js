@@ -12,6 +12,7 @@ function Initialize(){
 	console.log("Hello chat");
 	
 	isInNearBy = false;
+	isInChatList = false;
 	
 	$(document).keydown(function(e) {
 		if(e.which == 13) {
@@ -235,7 +236,18 @@ function LeaveGroup() {
 	socket.emit('leave-group', { group: chatID });
 	GroupChats[chatID] = null;
 	chatID = null;
-	$('#pagePort').load('nearbycontactsmap.html', function() {});
+	$("#pagePort").load("nearByContactsMap.html", function(){
+		isInNearBy = true;
+		isInChatList = false;
+		$('#pagePort').css("background-image","none");
+		$('#pagePort').trigger("create");
+		
+		/**analytics**/
+		ga('send', 'pageview', {
+			'page': 'nearByContactsMap.html',
+			'title': 'Friends finder map after registration'
+		});
+	});
 }
 
 window.onresize = function(){

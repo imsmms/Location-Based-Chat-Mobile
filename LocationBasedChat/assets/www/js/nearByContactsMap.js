@@ -152,8 +152,8 @@ function OpenChat(id){
 		ga('send', 'event', 'button', 'click', 'Group Chat button');
 		
 		chatID = null;
-		if(groupChatIDs.indexOf(id.split("_")[0]) == -1) {
-			groupChatIDs[groupChatCounter] = id.split("_")[0];
+		if(groupChatIDs.indexOf(id) == -1) {
+			groupChatIDs[groupChatCounter] = id;
 		}
 		var group = prompt("Please enter group name","");
 		if(group == null){
@@ -192,7 +192,7 @@ function OpenChat(id){
 	pageHistory.push("nearByContactsMap.html");
 	$("#pagePort").load("chat.html", function(){
 		$('#pagePort').trigger("create");
-		$('#pagePort').height(parseInt(window.innerHeight));
+		$('#pagePort').height(windowHight);
 		$('#pagePort').css("background-image","url('img/registrationChat.png')");
 		$('#pagePort').css("background-repeat","no-repeat");
 		$('#pagePort').css("background-size","100% 100%");
@@ -211,7 +211,7 @@ function openChatWindowFromHistory(id){
 	pageHistory.push("nearByContactsMap.html");
 	$("#pagePort").load("chat.html", function(){
 		$('#pagePort').trigger("create");
-		$('#pagePort').height(parseInt(window.innerHeight));
+		$('#pagePort').height(windowHight);
 		$('#pagePort').css("background-image","url('img/registrationChat.png')");
 		$('#pagePort').css("background-repeat","no-repeat");
 		$('#pagePort').css("background-size","100% 100%");
@@ -392,6 +392,8 @@ function openNearBy(){
 				'page': 'nearByContactsMap.html',
 				'title': 'Friends finder map after registration'
 			});
+			initializeNearBy();
+			getUserLocation();
 		});
 	}
 }
@@ -424,11 +426,13 @@ function addChatListItem(chathistoryid,name,lastchat){
 	strVar += "<li onclick=\"openChatWindowFromHistory(this.id)\" id=\""+chathistoryid+"\">";
 	strVar += "	<img alt=\"\" src=\"img\/user.png\">";
 	strVar += "	<h3>"+name+"<\/h3>";
-	strVar += "	<p>"+lastchat+"<\/p>";
+	strVar += "	<p>Last message: "+lastchat+"<\/p>";
 	strVar += "<\/li>";
+	return strVar;
 }
 
 function renderChatList(){
+	var chatItem = "";
 	for(var chathistoryid in chatHistory){
 		var listitemid = chathistoryid.split("_")[0];
 		var name = "";
@@ -438,7 +442,40 @@ function renderChatList(){
 			name = namePhoneMapping[listitemid];
 		}
 		//var chatItem = "<li><a onclick=\"openChatWindowFromHistory(this.id)\" id=\""+chathistoryid+"\">"+name+"<\/a><\/li>";
-		var chatItem = addChatListItem(chathistoryid,name,chatHistory[chathistoryid].history[chatHistory[chathistoryid].history.length - 1]);
-		$("#chatHistory").append(chatItem);
+		console.log(JSON.stringify(chatHistory[chathistoryid].history));
+		chatItem += addChatListItem(chathistoryid,name,chatHistory[chathistoryid].history[chatHistory[chathistoryid].history.length - 1].message);
 	}
+	$("#chatHistory").html(chatItem);
+}
+
+function openGroupInfo(){
+	$("#pagePort").load("groupinfo.html", function(){
+		var grouplisthtml = "";
+		for(var i=0;i<groupChatIDs.length;i++){
+			grouplisthtml += addgroupInfoListItem(namePhoneMapping[groupChatIDs[i]],i);
+		}
+		$("#groupinfolist").html(grouplisthtml);
+		
+		if(ChatGroups[chatID].isAdmin){
+			$("#addmember").css("display","block");
+			$("#removemember").css("display","block");
+			$("#deletegroup").css("display","block");
+		}else{
+			$("#leavegroup").css("display","block");
+		}
+	});
+}
+
+function addgroupInfoListItem(name,id){
+	var strVar="";
+	strVar += "<li style=\"height: 60px;\"><img alt=\"\" src=\"img\/user.png\">";
+	strVar += "			<h3>"+name+"<\/h3>";
+	strVar += "			<p>I am sing this app<\/p> <input id=\""+id+"\"";
+	strVar += "			type=\"checkbox\" style=\"float: right;\" data-role=\"none\" onchange=\"checkBoxChange(this.id)\" \/>";
+	strVar += "		<\/li>";
+	return strVar;
+}
+
+function checkBoxChange(id){
+	
 }

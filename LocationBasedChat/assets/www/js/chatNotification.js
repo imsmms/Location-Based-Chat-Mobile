@@ -56,7 +56,7 @@ function registerNewSocket() {
 						
 						$("#pagePort").load("chat.html", function(){
 							$('#pagePort').trigger("create");
-							$('#pagePort').height(parseInt(window.innerHeight));
+							$('#pagePort').height((windowHight-80)+"px");
 							$('#pagePort').css("background-image","url('img/registrationChat.png')");
 							$('#pagePort').css("background-repeat","no-repeat");
 							$('#pagePort').css("background-size","100% 100%");
