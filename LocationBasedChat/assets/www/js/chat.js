@@ -35,17 +35,18 @@ function Initialize(){
 	
 	if(groupChatFlag) {
 		InitGroupChat();
-		$('#leaveGroup').show();
+		/*$('#leaveGroup').show();
 		if(chatID === null || ChatGroups[chatID].isAdmin) {
 			$('#manageGroup').show();
-		}
+		}*/
+		$("#chatheader").attr("onclick","openGroupInfo()");
 	} else {
 		if(namePhoneMapping[chatID]){
 			$("#friendName").html(namePhoneMapping[chatID]);
 		}else{
 			$("#friendName").html(chatID);
 		}
-		
+		$("#chatheader").attr("onclick","");
 	}
 	var chatareaheight = parseInt($(window).height()) - 102;
 	$("#chatarea").css("max-height",chatareaheight+"px");
