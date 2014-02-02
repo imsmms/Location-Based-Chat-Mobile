@@ -55,6 +55,8 @@ function registerNewSocket() {
 						chatHistoryIndex = data.groupId+"__";
 						
 						$("#pagePort").load("chat.html", function(){
+							isInNearBy = false;
+							isInChatList = false;
 							$('#pagePort').trigger("create");
 							$('#pagePort').height((windowHight-80)+"px");
 							$('#pagePort').css("background-image","url('img/registrationChat.png')");
@@ -96,7 +98,9 @@ function registerNewSocket() {
 			break;
 		case 7:
 			console.log("Offline Notification!!!");
+			console.log(JSON.stringify(data));
 			removeUserFromMap(data);
+			
 			break;
 		default:
 			break;

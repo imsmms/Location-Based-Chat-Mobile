@@ -44,7 +44,7 @@ function getUserLocationSuccess(position){
 		center: myLocation,
 		zoom: 15
 	}); 
-	
+
 	locObj = {position : myLocation,name : "my location"};
 
 	createMarker(locObj,"img/orangepin.png");
@@ -59,12 +59,12 @@ function getUserLocationError(){
 }
 
 function getCurrentPositionNearByNativeSuccess(location){
-	
+
 	if(location == "null"){
 		alert(Location_Error);
 		return;
 	}
-	
+
 	var position = {
 			coords : {
 				latitude : location[0],
@@ -81,13 +81,13 @@ function getCurrentPositionNearByNativeSuccess(location){
  * @param pinColor
  */
 function createMarker(markerObj,pinImg){
-	
+
 	//var pinColor = "FE7569";
-    /*var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pinColor,
+	/*var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pinColor,
         new google.maps.Size(21, 34),
         new google.maps.Point(0,0),
         new google.maps.Point(10, 34));*/
-	
+
 	var marker = new google.maps.Marker({
 		map: map,
 		position: markerObj.position,
@@ -98,25 +98,25 @@ function createMarker(markerObj,pinImg){
 	//var infowindow;
 	if(markerObj.name == "my location"){
 		marker.infowindow = new google.maps.InfoWindow({
-	        content: markerObj.name
-	    });
+			content: markerObj.name
+		});
 	}else{
 		var contentString = createInfoWindowContent(markerObj.name,markerObj.number);
 		console.log(contentString);
-		
+
 		marker.infowindow = new google.maps.InfoWindow({
-	        content: contentString
-	    });
+			content: contentString
+		});
 	}
-	
-	
-	
+
+
+
 	google.maps.event.addListener(marker, 'click', function () {
 		marker.infowindow.open(map, marker);
 	});
-	
+
 	markersArray.push(marker);
-	
+
 	/*google.maps.event.addListener(infowindow, 'closeclick', function () {
 		window.location = "chat.html";
 	});*/
@@ -147,10 +147,10 @@ function createInfoWindowContent(name,id){
 
 function OpenChat(id){
 	if(groupChatFlag){
-		
+
 		/**analytics**/
 		ga('send', 'event', 'button', 'click', 'Group Chat button');
-		
+
 		chatID = null;
 		if(groupChatIDs.indexOf(id) == -1) {
 			groupChatIDs[groupChatCounter] = id;
@@ -165,7 +165,7 @@ function OpenChat(id){
 				return;
 			}
 		}
-		
+
 		groupName = group;
 		if(!chatHistory[group+"__"]){
 			//var chatItem = "<li><a onclick=\"openChatWindowFromHistory(this.id)\" id=\""+group+"__"+"\">"+group+"<\/a><\/li>";
@@ -174,10 +174,10 @@ function OpenChat(id){
 		}
 		chatHistoryIndex = group+"__";
 	}else{
-		
+
 		/**analytics**/
 		ga('send', 'event', 'button', 'click', 'Chat button');
-		
+
 		chatID = id;
 		if(!chatHistory[id+"__"]){
 			//var chatItem = "<li><a onclick=\"openChatWindowFromHistory(this.id)\" id=\""+id+"__"+"\">"+namePhoneMapping[id]+"<\/a><\/li>";
@@ -186,11 +186,13 @@ function OpenChat(id){
 		}
 		chatHistoryIndex = id+"__";
 	}
-	
-	
+
+
 	//window.location = "chat.html";
 	pageHistory.push("nearByContactsMap.html");
 	$("#pagePort").load("chat.html", function(){
+		isInNearBy = false;
+		isInChatList = false;
 		$('#pagePort').trigger("create");
 		$('#pagePort').height(windowHight);
 		$('#pagePort').css("background-image","url('img/registrationChat.png')");
@@ -210,6 +212,8 @@ function openChatWindowFromHistory(id){
 	console.log(chatHistoryIndex);
 	pageHistory.push("nearByContactsMap.html");
 	$("#pagePort").load("chat.html", function(){
+		isInNearBy = false;
+		isInChatList = false;
 		$('#pagePort').trigger("create");
 		$('#pagePort').height(windowHight);
 		$('#pagePort').css("background-image","url('img/registrationChat.png')");
@@ -219,16 +223,16 @@ function openChatWindowFromHistory(id){
 }
 
 function addToGroup(id){
-	
+
 	/**analytics**/
 	ga('send', 'event', 'button', 'click', 'Add to Group button');
-	
-	
+
+
 	if(groupChatIDs.indexOf(id.split("_")[0]) == -1){
 		groupChatIDs[groupChatCounter] = id.split("_")[0];
 		groupChatCounter++;
 		groupChatFlag = true;
-		
+
 	}
 
 	for(var i=0;i<markersArray.length;i++){
@@ -244,15 +248,15 @@ function getNearByContacts(loc){
 	var url = BASE_URL + NEAR_CONTACTS_API + userId + "/" + loc.e +"/" + loc.d + "/5";
 	console.log(url);
 	$.getJSON(url,getNearByContactsSuccess).fail(function() {
-	    console.log( "error" );
+		console.log( "error" );
 		//fake data
-//	    var contactObj = {};
+//		var contactObj = {};
 //		contactObj.name = "Ibrahim";
 //		contactObj.number = "01025600901";
 //		var contactLoc = new google.maps.LatLng(30.02, 31.216);
 //		contactObj.position = contactLoc;
 //		createMarker(contactObj,"67F097");
-	  });
+	});
 }
 
 /**
@@ -273,18 +277,18 @@ function getNearByContactsSuccess(data){
 		var contactLoc = new google.maps.LatLng(lat, lng);
 		contactObj.position = contactLoc;
 		createMarker(contactObj,"img/greenpin.png");
-		
+
 		onlineUsers.push(data.contacts[i].number);
 	}
 	navigator.notification.activityStop();
 	fillNearByContacts(data);
-	
+
 	//fake data
-	contactObj.name = "Nourhan";
+	/*contactObj.name = "Nourhan";
 	contactObj.number = "01067310900";
 	var contactLoc = new google.maps.LatLng(30.02422, 31.21413);
 	contactObj.position = contactLoc;
-	createMarker(contactObj,"img/greenpin.png");
+	createMarker(contactObj,"img/greenpin.png");*/
 }
 
 function fillNearByContacts(data){
@@ -301,70 +305,72 @@ function fillNearByContacts(data){
 		newContact.contactName = namePhoneMapping[data.contact];
 		nearByContacts.push(newContact);
 	}
-	
+
 }
 
 function addNewOnlineUserToMap(data){
 	var contactObj = {};
 	contactObj.name = namePhoneMapping[data.contact];
-	
+
 	if(!contactObj.name){
 		contactObj.name = namePhoneMapping["+2"+data.contact];
 	}
-	
+
 	contactObj.number = data.contact;
 	var lat = parseFloat(data.loc[1]);
 	var lng = parseFloat(data.loc[0]);
 	var contactLoc = new google.maps.LatLng(lat, lng);
 	contactObj.position = contactLoc;
-	createMarker(contactObj,"../img/greenpin.png");
+	createMarker(contactObj,"img/greenpin.png");
 	fillNearByContacts(data);
+	onlineUsers.push(data.contact);
 }
 
 function removeUserFromMap(data){
+	console.log(JSON.stringify(onlineUsers));
 	var index = onlineUsers.indexOf(data.contact);
 	if (index > -1) {
 		onlineUsers.splice(index, 1);
-		markersArray[index].setMap(null);
-		markersArray.splice(index, 1);
+		markersArray[index+1].setMap(null);
+		markersArray.splice(index+1, 1);
 	}
 }
 
 function openMenu(){
-	
+
 	/**analytics**/
 	ga('send', 'event', 'button', 'click', 'Open legt menu button');
-	
+
 	$("#mypanel").panel("open");
 }
 
 function refreshNearBy(){
 	/**analytics**/
 	ga('send', 'event', 'button', 'click', 'Refresh near by button');
-	
+
 	$("#mypanel").panel("close");
 	getUserLocation();
 }
 
 function hideMyLocation(){
-	
+
 	/**analytics**/
 	ga('send', 'event', 'button', 'click', 'Hide my location button');
-	
+
 	var url = BASE_URL + "/hide/" + userId;
 	$.post(url,showHideSuccess).fail(function() {
-	    console.log( "error hiding" );
+		console.log( "error hiding" );
 	});
 }
 
 function showMyLocation(){
-	
+
 	/**analytics**/
 	ga('send', 'event', 'button', 'click', 'Show my location button');
-	
+
 	var url = BASE_URL + "/show/" + userId;
 	$.post(url,showHideSuccess).fail(function() {
-	    console.log( "error showing" );
+		console.log( "error showing" );
 	});
 }
 
@@ -375,7 +381,7 @@ function showHideSuccess(data){
 function openRightMenu(){
 	/**analytics**/
 	ga('send', 'event', 'button', 'click', 'Open right menu button');
-	
+
 	$("#myrightpanel").panel("open");
 }
 
@@ -386,7 +392,7 @@ function openNearBy(){
 			isInChatList = false;
 			$('#pagePort').css("background-image","none");
 			$('#pagePort').trigger("create");
-			
+
 			/**analytics**/
 			ga('send', 'pageview', {
 				'page': 'nearByContactsMap.html',
@@ -408,8 +414,8 @@ function openChatList(){
 			$('#chatlistcontainer').css("background-image","url('img/registrationChat.png')");
 			$('#chatlistcontainer').css("background-repeat","no-repeat");
 			$('#chatlistcontainer').css("background-size","100% 100%");
-			
-			
+
+
 			$("#chatList").html($("#chatHistory").html());
 			$('#pagePort').trigger("create");
 			/**analytics**/
@@ -443,7 +449,12 @@ function renderChatList(){
 		}
 		//var chatItem = "<li><a onclick=\"openChatWindowFromHistory(this.id)\" id=\""+chathistoryid+"\">"+name+"<\/a><\/li>";
 		console.log(JSON.stringify(chatHistory[chathistoryid].history));
-		chatItem += addChatListItem(chathistoryid,name,chatHistory[chathistoryid].history[chatHistory[chathistoryid].history.length - 1].message);
+		if(chatHistory[chathistoryid].history.length > 0){
+			chatItem += addChatListItem(chathistoryid,name,chatHistory[chathistoryid].history[chatHistory[chathistoryid].history.length - 1].message);
+		}else{
+			chatItem += addChatListItem(chathistoryid,name,"");
+		}
+		
 	}
 	$("#chatHistory").html(chatItem);
 }
@@ -451,18 +462,26 @@ function renderChatList(){
 function openGroupInfo(){
 	$("#pagePort").load("groupinfo.html", function(){
 		var grouplisthtml = "";
-		for(var i=0;i<groupChatIDs.length;i++){
-			grouplisthtml += addgroupInfoListItem(namePhoneMapping[groupChatIDs[i]],i);
-		}
-		$("#groupinfolist").html(grouplisthtml);
-		
+
 		if(ChatGroups[chatID].isAdmin){
+			for(var i=0;i<groupChatIDs.length;i++){
+				grouplisthtml += addgroupInfoListItem(namePhoneMapping[groupChatIDs[i]],i);
+			}
+			$("#groupinfolist").html(grouplisthtml);
+
+
 			$("#addmember").css("display","block");
 			$("#removemember").css("display","block");
 			$("#deletegroup").css("display","block");
 		}else{
+			
+			for(var i=0;i<ChatGroups[chatID].groupMembers.length;i++){
+				grouplisthtml += addgroupInfoListItem(namePhoneMapping[ChatGroups[chatID].groupMembers[i]],i);
+			}
+			$("#groupinfolist").html(grouplisthtml);
 			$("#leavegroup").css("display","block");
 		}
+		$('#pagePort').trigger("create");
 	});
 }
 
@@ -471,11 +490,11 @@ function addgroupInfoListItem(name,id){
 	strVar += "<li style=\"height: 60px;\"><img alt=\"\" src=\"img\/user.png\">";
 	strVar += "			<h3>"+name+"<\/h3>";
 	strVar += "			<p>I am sing this app<\/p> <input id=\""+id+"\"";
-	strVar += "			type=\"checkbox\" style=\"float: right;\" data-role=\"none\" onchange=\"checkBoxChange(this.id)\" \/>";
+	strVar += "			type=\"checkbox\" style=\"float: right;\" data-role=\"none\" onchange=\"checkBoxChange(this.id)\" style=\"display:none;\" \/>";
 	strVar += "		<\/li>";
 	return strVar;
 }
 
 function checkBoxChange(id){
-	
+
 }

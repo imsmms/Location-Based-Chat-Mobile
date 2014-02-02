@@ -242,6 +242,8 @@ function LeaveGroup() {
 		isInChatList = false;
 		$('#pagePort').css("background-image","none");
 		$('#pagePort').trigger("create");
+		initializeNearBy();
+		getUserLocation();
 		
 		/**analytics**/
 		ga('send', 'pageview', {

@@ -93,6 +93,8 @@ function getPhoneContactsSuccess(contacts){
 	if(isnearBy){
 		//window.location = "nearByContactsMap.html";
 		$("#pagePort").load("nearByContactsMap.html", function(){
+			isInNearBy = true;
+			isInChatList = false;
 			$('#pagePort').css("background-image","none");
 			$('#pagePort').trigger("create");
 			/**analytics**/
@@ -171,6 +173,8 @@ function saveUserId(id){
 	localStorage.setItem("UserID", id);
 	if(localStorage.getItem("UserID")){
 		$("#pagePort").load("nearByContactsMap.html", function(){
+			isInNearBy = true;
+			isInChatList = false;
 			$('#pagePort').css("background-image","none");
 			$('#pagePort').trigger("create");
 			
